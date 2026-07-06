@@ -267,7 +267,7 @@ function openModal(i) {
   modalEntryId = e ? e.id : null;
   const box = document.getElementById('m-media');
   if (e.type === 'video') {
-    box.innerHTML = `<video controls autoplay playsinline ${e.poster ? `poster="${esc(MEDIA_HOST + mediaBase(e) + encPath(e.poster))}"` : ''} src="${esc(mediaUrl(e))}"></video>`;
+    box.innerHTML = `<video controls autoplay playsinline ${e.thumbnail ? `poster="${esc(thumbUrl(e))}"` : ''} src="${esc(mediaUrl(e))}"></video>`;
   } else {
     box.innerHTML = `<img src="${esc(mediaUrl(e))}" alt="">`;
   }
