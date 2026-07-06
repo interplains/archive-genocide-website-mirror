@@ -7,8 +7,16 @@ no single takedown, host, or country can remove the evidence.
 
 You need three things together in this folder:
    1) this code            (you already have it)
-   2) the DATA files    ->  put them in the  data\  folder        (from the release)
+   2) the DATA files    ->  run  get-data  (below) to fetch them into  data\
    3) the FOOTAGE       ->  the  "archivegenocide-media"  folder   (from the torrent)
+
+GET THE DATA (do this once):
+   Windows:      double-click   get-data.cmd
+   Mac / Linux:  run            bash get-data.sh
+   It downloads the gallery + victims files (~95 MB) into  data\  from
+   https://archivegenocide.com  (gallery_high.json, gallery_rest.json,
+   gallery_meta.json, victims.json). That's the only step that touches the network;
+   the mirror server itself never does.
 
 
 --------------------------------------------------------------------

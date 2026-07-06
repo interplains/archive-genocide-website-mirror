@@ -22,7 +22,7 @@ if not defined PY (
 REM --- 2. gallery data present? ---
 if not exist "data\gallery_high.json" (
   echo  The gallery data is not here yet ^(data\gallery_high.json^).
-  echo  Download the release data files into the "data" folder, then run this again.
+  echo  Run  get-data.cmd  first to download it ^(~95 MB^), then run this again.
   echo.
   pause & exit /b 1
 )

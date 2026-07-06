@@ -12,8 +12,9 @@ the internet, and do not send any data anywhere — this is a fully local, offli
    "Add python.exe to PATH"), then stop and ask them to re-run you afterward.
 
 2. **Check the gallery data.** Confirm `data/gallery_high.json` exists.
-   - If it's missing, tell the user they still need the release **data files** and to put them
-     in the `data/` folder (they come from the archive's official release page), then stop.
+   - If it's missing, offer to fetch it: run **`bash get-data.sh`** (or `get-data.cmd` on Windows),
+     which downloads `gallery_high.json`, `gallery_rest.json`, `gallery_meta.json`, `victims.json`
+     (~95 MB) into `data/` from `https://archivegenocide.com`. Then continue.
 
 3. **Find the footage.** The media lives in a folder named **`archivegenocide-media/`** (from
    the signed torrent). Each `<slug>/<file>` inside it matches what the gallery references.

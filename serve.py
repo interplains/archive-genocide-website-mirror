@@ -114,6 +114,73 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):              # quiet
         pass
 
+    def guess_type(self, path):
+        # .mov/.quicktime/.m4v are QuickTime/H.264 containers browsers play as mp4; the default
+        # guess (octet-stream / video/mov) + nosniff makes them refuse to play. Force video/mp4.
+        if str(path).lower().endswith(('.mov', '.quicktime', '.m4v')):
+            return 'video/mp4'
+        return super().guess_type(path)
+
+    def send_head(self):
+        # Range-aware (video seeking); the stdlib handler ignores Range and always sends 200.
+        path = self.translate_path(self.path)
+        if os.path.isdir(path):
+            self.send_error(404); return None
+        ctype = self.guess_type(path)
+        try:
+            f = open(path, 'rb')
+        except OSError:
+            self.send_error(404, "File not found"); return None
+        try:
+            fs = os.fstat(f.fileno())
+            size = fs[6]
+            rng = self.headers.get('Range')
+            if rng and rng.startswith('bytes='):
+                try:
+                    s, e = rng[6:].split('-', 1)
+                    if s == '':
+                        start = max(0, size - int(e)); end = size - 1
+                    else:
+                        start = int(s); end = int(e) if e else size - 1
+                    end = min(end, size - 1)
+                    if start > end or start >= size:
+                        self.send_response(416)
+                        self.send_header('Content-Range', 'bytes */%d' % size)
+                        self.send_header('Content-Length', '0'); self.end_headers()
+                        f.close(); return None
+                    self._send_len = end - start + 1
+                    self.send_response(206)
+                    self.send_header('Content-Type', ctype)
+                    self.send_header('Content-Range', 'bytes %d-%d/%d' % (start, end, size))
+                    self.send_header('Content-Length', str(self._send_len))
+                    self.send_header('Accept-Ranges', 'bytes')
+                    self.send_header('Last-Modified', self.date_time_string(fs.st_mtime))
+                    self.end_headers()
+                    f.seek(start); return f
+                except (ValueError, IndexError):
+                    pass                                  # malformed Range -> full 200
+            self._send_len = size
+            self.send_response(200)
+            self.send_header('Content-Type', ctype)
+            self.send_header('Content-Length', str(size))
+            self.send_header('Accept-Ranges', 'bytes')
+            self.send_header('Last-Modified', self.date_time_string(fs.st_mtime))
+            self.end_headers()
+            return f
+        except Exception:
+            f.close(); raise
+
+    def copyfile(self, source, outputfile):
+        remaining = getattr(self, '_send_len', None)
+        if remaining is None:
+            return super().copyfile(source, outputfile)
+        self._send_len = None
+        while remaining > 0:
+            chunk = source.read(min(65536, remaining))
+            if not chunk:
+                break
+            outputfile.write(chunk); remaining -= len(chunk)
+
 
 if __name__ == '__main__':
     import sys

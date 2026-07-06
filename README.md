@@ -14,8 +14,11 @@ anyone can re-seed them).
 
 ## You need three things together in one folder
 1. **this code** — you have it
-2. **the data files** → put them in `data/`  *(from the release)*
-3. **the footage** → the **`archivegenocide-media/`** folder  *(from the torrent)*
+2. **the data files** → run **`get-data`** to fetch them into `data/` (once):
+   - Windows: double-click `get-data.cmd` · Mac/Linux: `bash get-data.sh`
+   - grabs `gallery_high.json`, `gallery_rest.json`, `gallery_meta.json`, `victims.json` (~95 MB) from
+     `https://archivegenocide.com`. This is the *only* step that touches the network; the server never does.
+3. **the footage** → the **`archivegenocide-media/`** folder  *(from the signed torrent)*
 
 ---
 

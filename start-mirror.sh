@@ -20,7 +20,7 @@ fi
 # 2. gallery data present?
 if [ ! -f "data/gallery_high.json" ]; then
   echo "The gallery data is not here yet (data/gallery_high.json)."
-  echo "Download the release data files into the 'data' folder, then run this again."
+  echo "Run  bash get-data.sh  first to download it (~95 MB), then run this again."
   read -r -p "Press Enter to close. " _ ; exit 1
 fi
 
