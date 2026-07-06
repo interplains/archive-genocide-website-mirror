@@ -13,10 +13,17 @@ You need three things together in this folder:
 GET THE DATA (do this once):
    Windows:      double-click   get-data.cmd
    Mac / Linux:  run            bash get-data.sh
-   It downloads the gallery + victims files (~95 MB) into  data\  from
-   https://archivegenocide.com  (gallery_high.json, gallery_rest.json,
-   gallery_meta.json, victims.json). That's the only step that touches the network;
-   the mirror server itself never does.
+   It downloads the gallery + victims files (~95 MB) into  data\
+   (gallery_high.json, gallery_rest.json, gallery_meta.json, victims.json).
+   It tries the official mirrors in order - archivegenocide.com, then .org,
+   then .is - so one being down or blocked doesn't stop you. That's the only
+   step that touches the network; the mirror server itself never does.
+
+   Privacy / blocked networks: fetch it your own way instead -
+      bash get-data.sh https://a-mirror-you-trust.example   (any source you trust)
+      torsocks bash get-data.sh                             (route it through Tor)
+   It's just a plain HTTPS download of public, edge-cached files - the same
+   thing your browser does when it visits the site.
 
 
 --------------------------------------------------------------------
