@@ -1,10 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
-title War Crimes Archive - Mirror
+title Archive Genocide Website Mirror
 cd /d "%~dp0"
 
 echo ============================================================
-echo    War Crimes Archive - local mirror
+echo    Archive Genocide - local mirror
 echo ============================================================
 echo.
 

@@ -4,7 +4,7 @@
 cd "$(dirname "$0")" || exit 1
 
 echo "============================================================"
-echo "   War Crimes Archive - local mirror"
+echo "   Archive Genocide - local mirror"
 echo "============================================================"
 echo
 

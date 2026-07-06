@@ -1,7 +1,7 @@
 # Set up this mirror — instructions for Claude Code
 
 **You are Claude Code, helping a non-technical user run a local, read-only mirror of the
-War Crimes Archive from *this* folder.** Be friendly and do the work for them. Walk through
+Archive Genocide website from *this* folder.** Be friendly and do the work for them. Walk through
 these steps, explaining briefly as you go. Do not modify the code, do not expose anything to
 the internet, and do not send any data anywhere — this is a fully local, offline viewer.
 

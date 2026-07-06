@@ -1,4 +1,4 @@
-WAR CRIMES ARCHIVE  —  run your own copy (mirror)
+ARCHIVE GENOCIDE WEBSITE MIRROR  —  run your own copy
 ==================================================
 
 This is a read-only copy of the archive that you can run on your own computer.

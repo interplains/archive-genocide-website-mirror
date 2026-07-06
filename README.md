@@ -1,4 +1,4 @@
-# War Crimes Archive — Open-Source Mirror Kit
+# Archive Genocide Website Mirror
 
 A **read-only, self-hostable copy** of the archive. The goal is simple: **make the
 documentation impossible to erase.** Anyone can run their own mirror, so no single
