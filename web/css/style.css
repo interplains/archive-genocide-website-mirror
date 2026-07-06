@@ -74,6 +74,14 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .modal-desc { white-space: pre-wrap; font-size: .92rem; color: #dcdcdc; }
 #m-link { display: inline-block; margin-top: 14px; color: var(--accent); font-size: .85rem; text-decoration: none; }
 #m-link:hover { text-decoration: underline; }
+.modal-actions { display: flex; align-items: center; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+.modal-actions #m-link { margin-top: 0; }
+.m-share { background: var(--accent); color: #fff; border: none; border-radius: 7px;
+  padding: 8px 14px; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.m-share:hover { filter: brightness(1.12); }
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  background: #27ae60; color: #fff; padding: 10px 22px; border-radius: 6px; z-index: 9999;
+  font-size: .9rem; font-weight: 500; pointer-events: none; }
 
 @media (max-width: 600px) {
   .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
