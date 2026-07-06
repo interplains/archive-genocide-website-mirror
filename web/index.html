@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Strict, entirely same-origin: this mirror makes NO external requests. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>War Crimes Archive — Mirror</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- CONTENT WARNING -->
+<div id="cw">
+  <div class="cw-box">
+    <div class="cw-icon">⚠️</div>
+    <h1>Content Warning</h1>
+    <p>This archive contains <strong>graphic footage</strong> of war crimes — violence, death,
+       and serious injury — collected for <strong>documentation and accountability</strong>.
+       Viewer discretion is advised.</p>
+    <div class="cw-btns">
+      <button id="cw-enter" class="btn-primary">I understand — Enter</button>
+      <button id="cw-leave" class="btn-secondary">Leave</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="brand">War Crimes Archive <span class="mirror-tag">mirror</span></div>
+  <div class="sub">An independently-hostable, read-only copy. Verify authenticity — see <code>VERIFY.md</code>.</div>
+</header>
+
+<!-- FILTERS -->
+<div class="filters">
+  <input type="text" id="f-search" placeholder="Search description, source…" autocomplete="off" spellcheck="false">
+  <select id="f-conf">
+    <option value="high">Verified footage</option>
+    <option value="all">All footage</option>
+  </select>
+  <select id="f-type">
+    <option value="video">Videos only</option>
+    <option value="">All media</option>
+    <option value="photo">Photos only</option>
+  </select>
+  <select id="f-archive"><option value="">All sources</option></select>
+  <label>From <input type="date" id="f-from"></label>
+  <label>To <input type="date" id="f-to"></label>
+  <button id="f-reset">Reset</button>
+</div>
+
+<div id="count" class="count">Loading…</div>
+<div id="grid" class="grid"></div>
+<div id="pager" class="pager"></div>
+
+<!-- LIGHTBOX -->
+<div id="modal">
+  <div class="modal-box">
+    <button id="m-close" aria-label="Close">✕</button>
+    <div id="m-media" class="modal-media"></div>
+    <div class="modal-info">
+      <div id="m-meta" class="modal-meta"></div>
+      <div id="m-desc" class="modal-desc"></div>
+      <a id="m-link" href="#" target="_blank" rel="noopener noreferrer nofollow">View original source ↗</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

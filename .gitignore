@@ -1,0 +1,20 @@
+# The data + media come from the signed torrent, NOT from git (too large + change often).
+/data/*
+/media/*
+!/data/.gitkeep
+!/media/.gitkeep
+
+# Never commit signing SECRET keys or any credentials.
+*.key
+*.sec
+minisign.key
+*secret*
+*.pem
+.env
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+__pycache__/
+*.pyc
