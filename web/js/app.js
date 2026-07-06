@@ -4,7 +4,9 @@
    MEDIA_HOST if you deliberately serve media from another host YOU control. */
 'use strict';
 
-const MEDIA_HOST = '';          // '' = serve media from this same mirror (recommended)
+const MEDIA_HOST = '';          // '' = serve media from this same mirror (recommended). If you point this
+                                // at another origin, ALSO widen the CSP (media-src/img-src) in every *.html,
+                                // or the browser will block the cross-origin media + thumbnails.
 const PAGE_SIZE  = 48;
 
 const encPath   = p => (p || '').split('/').map(encodeURIComponent).join('/');
