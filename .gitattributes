@@ -1,0 +1,12 @@
+# Normalize text to LF in the repo, with OS-correct line endings on checkout:
+* text=auto
+
+# Shell scripts MUST be LF (a CRLF shebang breaks bash on macOS/Linux).
+*.sh        text eol=lf
+*.command   text eol=lf
+verify.sh   text eol=lf
+start-mirror.sh text eol=lf
+
+# Windows batch MUST be CRLF.
+*.cmd       text eol=crlf
+*.bat       text eol=crlf
