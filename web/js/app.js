@@ -100,30 +100,58 @@ function setupContentWarning() {
 
 async function loadData() {
   try {
-    const [high, meta] = await Promise.all([
-      fetch('gallery_high.json').then(r => r.json()),
-      fetch('gallery_meta.json').then(r => r.ok ? r.json() : null).catch(() => null),
-    ]);
-    allEntries = high;
-    fillArchives(meta);
-    const _q = new URLSearchParams(location.search).get('q');
-    if (_q) { const s = document.getElementById('f-search'); if (s) s.value = _q; }
-    applyFilters();
-    tryOpenPending();
-    // Load the rest (non-high) in the background so first paint is fast.
-    fetch('gallery_rest.json').then(r => r.ok ? r.json() : []).then(rest => {
-      if (Array.isArray(rest) && rest.length) { allEntries = allEntries.concat(rest); restLoaded = true; applyFilters(); tryOpenPending(); }
-    }).catch(() => {});
+    // Volume-aware: serve.py auto-discovers gallery chunks and writes data/index.json.
+    const manifest = await fetch('index.json').then(r => r.ok ? r.json() : null).catch(() => null);
+    if (manifest && (manifest.primary || (manifest.chunks && manifest.chunks.length))) await loadFromManifest(manifest);
+    else await loadLegacy();
   } catch (err) {
     document.getElementById('grid').innerHTML =
       '<p class="msg">Could not load the gallery data. Make sure <code>gallery_high.json</code> is in <code>data/</code> (from the released torrent).</p>';
   }
 }
 
-function fillArchives(meta) {
+// Load the discovered chunks: the primary first (fast paint), the rest (incl. any volumes) in the background.
+async function loadFromManifest(m) {
+  const primary = m.primary || (m.chunks && m.chunks[0]);
+  const rest = (m.rest && m.rest.length) ? m.rest : (m.chunks || []).filter(c => c !== primary);
+  if (primary) mergeEntries(await fetch(primary).then(r => r.json()));
+  firstPaint();
+  Promise.all(rest.map(url =>
+    fetch(url).then(r => r.ok ? r.json() : []).then(a => { if (Array.isArray(a) && a.length) mergeEntries(a); }).catch(() => {})
+  )).then(() => { restLoaded = true; fillArchives(); applyFilters(); tryOpenPending(); });
+}
+
+// Backward-compatible path for a mirror with no index.json (just the two legacy files).
+async function loadLegacy() {
+  mergeEntries(await fetch('gallery_high.json').then(r => r.json()));
+  firstPaint();
+  fetch('gallery_rest.json').then(r => r.ok ? r.json() : []).then(rest => {
+    if (Array.isArray(rest) && rest.length) { mergeEntries(rest); restLoaded = true; applyFilters(); tryOpenPending(); }
+  }).catch(() => {});
+}
+
+const _seen = new Set();            // id-dedup so overlapping chunks never double-show
+function mergeEntries(arr) {
+  if (!Array.isArray(arr)) return;
+  for (const e of arr) { const k = String(e.id); if (!_seen.has(k)) { _seen.add(k); allEntries.push(e); } }
+}
+
+function firstPaint() {
+  fillArchives();
+  const _q = new URLSearchParams(location.search).get('q');
+  if (_q) { const s = document.getElementById('f-search'); if (s) s.value = _q; }
+  applyFilters();
+  tryOpenPending();
+}
+
+// Rebuild the source dropdown from whatever's loaded (idempotent; new volumes' sources appear automatically).
+function fillArchives() {
   const sel = document.getElementById('f-archive');
-  const names = (meta && meta.archives) || [...new Set(allEntries.map(e => e.source_archive).filter(Boolean))].sort();
-  names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
+  const cur = sel.value;
+  while (sel.options.length > 1) sel.remove(1);
+  [...new Set(allEntries.map(e => e.source_archive).filter(Boolean))].sort()
+    .forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
+  if (cur) sel.value = cur;
 }
 
 function setupFilters() {

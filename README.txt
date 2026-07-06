@@ -53,6 +53,20 @@ To put a mirror on the public internet, run it behind a normal web server or CDN
 
 
 --------------------------------------------------------------------
+ADDING FUTURE RELEASES (Volume 2, 3, ...)
+--------------------------------------------------------------------
+The archive grows in "volumes." Adding one is drop-in:
+
+   1) Download the new volume's torrent into the SAME  archivegenocide-media  folder
+      (all volumes share it -- nothing is re-downloaded).
+   2) If its gallery chunk wasn't inside the torrent, drop  gallery_<vol>.json  into  data/.
+   3) Restart (double-click / re-run). The server auto-detects everything and the new
+      footage appears -- already searchable and sorted, its source in the filter list.
+
+You never edit a config file. (Static host? run  python serve.py --reindex  then redeploy.)
+
+
+--------------------------------------------------------------------
 IS IT REAL / IS IT SAFE?
 --------------------------------------------------------------------
 Anyone can copy this, so VERIFY a download before trusting it — see VERIFY.md, or run:

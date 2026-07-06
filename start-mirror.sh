@@ -24,6 +24,20 @@ if [ ! -f "data/gallery_high.json" ]; then
   read -r -p "Press Enter to close. " _ ; exit 1
 fi
 
+# 2b. auto-verify the release signature if the tools + files are present
+if [ -f key.asc ] && [ -f SHA256SUMS ] && [ -f SHA256SUMS.asc ] && command -v gpg >/dev/null 2>&1; then
+  echo "Verifying release signature..."
+  if sh verify.sh >/tmp/agverify.$$ 2>&1; then
+    echo "  release verified OK."
+  else
+    echo "  ** VERIFICATION FAILED - this copy may be tampered with. **"
+    sed 's/^/    /' /tmp/agverify.$$
+    read -r -p "  Continue anyway? [y/N] " a; case "$a" in y|Y) ;; *) rm -f /tmp/agverify.$$; exit 1 ;; esac
+  fi
+  rm -f /tmp/agverify.$$
+  echo
+fi
+
 # 3. find the footage, or ask
 if [ -d "archivegenocide-media" ]; then
   export MEDIA_DIR="$PWD/archivegenocide-media"

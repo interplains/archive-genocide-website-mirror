@@ -16,7 +16,7 @@ Quick start:
 Put the gallery JSON in ./data/ and the media folders in ./media/ (both come from
 the released torrent). Nothing here phones home or accepts input.
 """
-import http.server, os, posixpath, urllib.parse
+import http.server, os, posixpath, urllib.parse, json
 
 ROOT  = os.path.dirname(os.path.abspath(__file__))
 WEB   = os.path.join(ROOT, 'web')
@@ -51,17 +51,53 @@ def safe_join(base, rel):
     return None
 
 
+def _list_chunks():
+    """Gallery index chunks: data/gallery_*.json (minus meta) + <media>/_index/*.json (bundled in volume torrents)."""
+    chunks = []
+    if os.path.isdir(DATA):
+        for fn in sorted(os.listdir(DATA)):
+            if fn.startswith('gallery_') and fn.endswith('.json') and fn != 'gallery_meta.json':
+                chunks.append(fn)                       # fetched at  /<fn>
+    idx = os.path.join(MEDIA, '_index')
+    if os.path.isdir(idx):
+        for fn in sorted(os.listdir(idx)):
+            if fn.endswith('.json'):
+                chunks.append('_index/' + fn)           # fetched at  /_index/<fn>  (via the media route)
+    return chunks
+
+
+def build_index():
+    """Auto-discover gallery chunks and write data/index.json (the viewer's manifest). Adding a volume =
+    drop its media + gallery chunk, then restart -- this finds it. The operator never hand-edits a manifest."""
+    chunks = _list_chunks()
+    primary = 'gallery_high.json' if 'gallery_high.json' in chunks else (chunks[0] if chunks else None)
+    manifest = {'primary': primary, 'rest': [c for c in chunks if c != primary], 'chunks': chunks,
+                'meta': 'gallery_meta.json' if os.path.isfile(os.path.join(DATA, 'gallery_meta.json')) else None,
+                'generated_by': 'serve.py'}
+    try:
+        os.makedirs(DATA, exist_ok=True)
+        with open(os.path.join(DATA, 'index.json'), 'w', encoding='utf-8') as f:
+            json.dump(manifest, f, ensure_ascii=False, indent=1)
+    except OSError:
+        pass
+    return manifest
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _resolve(self, path):
         p = path.split('?', 1)[0].split('#', 1)[0].lstrip('/')
         if p == '':
             return os.path.join(WEB, 'index.html')
-        if p in DATA_FILES:
-            return safe_join(DATA, p)
+        # data files: the fixed set + the generated manifest + any gallery_*.json chunk
+        if '/' not in p and (p in DATA_FILES or p == 'index.json'
+                             or (p.startswith('gallery_') and p.endswith('.json'))):
+            j = safe_join(DATA, p)
+            if j and os.path.isfile(j):
+                return j
         web = safe_join(WEB, p)
         if web and os.path.isfile(web):
             return web
-        return safe_join(MEDIA, p)          # everything else = media/<archive>/<file>
+        return safe_join(MEDIA, p)          # everything else = media/<archive>/<file> (incl. _index/*.json)
 
     def translate_path(self, path):
         return self._resolve(path) or os.path.join(WEB, '__no_such_file__')
@@ -80,10 +116,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    import sys
     os.chdir(ROOT)
+    manifest = build_index()            # auto-discover gallery chunks -> data/index.json
+    nchunks = len(manifest.get('chunks') or [])
+    if '--reindex' in sys.argv:          # for static hosts: regenerate the manifest and exit (no serving)
+        print(f"Wrote data/index.json: {nchunks} gallery chunk(s) discovered.")
+        sys.exit(0)
     print(f"Archive mirror running:  http://localhost:{PORT}")
     print(f"  media dir: {MEDIA}")
-    print("  (put the released 'archivegenocide-media/' folder here, or set MEDIA_DIR=/path/to/it)")
+    print(f"  gallery chunks: {nchunks}" + (f" (primary: {manifest['primary']})" if manifest.get('primary') else "  -- none found; put gallery data in data/"))
+    print("  (drop a new volume's media + gallery chunk here, then restart, to add it)")
     print("  read-only viewer — no admin, no submissions, no tracking, no outbound calls")
     try:
         http.server.ThreadingHTTPServer(('0.0.0.0', PORT), Handler).serve_forever()

@@ -48,6 +48,21 @@ pull-zone) rather than exposing this server directly.
 
 ---
 
+## Adding future releases (Volume 2, 3, …)
+The archive grows in **additive volumes**, all sharing the one `archivegenocide-media/` folder
+(so nothing is ever re-downloaded). Adding one is drop-in:
+
+1. Download the new volume's torrent into your existing **`archivegenocide-media/`** folder.
+2. If its gallery chunk wasn't bundled in the torrent, drop `gallery_<vol>.json` into `data/`.
+3. **Restart.** On startup the server auto-discovers every chunk (from `data/` *and* a bundled
+   `archivegenocide-media/_index/`), rebuilds `data/index.json`, and the new footage appears —
+   **already searchable and sorted**, its source added to the filter dropdown.
+
+You never hand-edit a manifest, and a mirror holding only *some* volumes just shows those (no
+broken cards). Static host? run `python serve.py --reindex` to regenerate the manifest, then redeploy.
+
+---
+
 ## What it is / isn't
 **It is:** a zero-dependency, read-only viewer. Open the footage, search, filter, watch.
 
