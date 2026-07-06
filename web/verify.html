@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>Verify — War Crimes Archive Mirror</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">War Crimes Archive <span class="mirror-tag">mirror</span></a>
+  <div class="nav-links">
+    <a href="index.html">Gallery</a>
+    <a href="sources.html">Sources</a>
+    <a href="verify.html" class="active">Verify</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1>Verify this <span>copy</span></h1>
+  <p class="lead">Anyone can copy this project, so <b>don't trust a mirror until you've verified it.</b>
+    Every official release is signed with the project's GPG key. A tampered or fake copy cannot pass
+    this check.</p>
+
+  <h2>The release-signing key</h2>
+  <p>Cross-check this fingerprint against the official site and the project's pinned social posts.
+    It must match all of them:</p>
+  <div class="fp">C24E&nbsp; C92B&nbsp; 12D6&nbsp; 670A&nbsp; 2516&nbsp;&nbsp; 065F&nbsp; 9B4D&nbsp; 5754&nbsp; 99AF&nbsp; A53C</div>
+
+  <h2>Verify it — the easy way</h2>
+  <p>From the folder holding <code>key.asc</code>, <code>SHA256SUMS</code>, <code>SHA256SUMS.asc</code>,
+    and the release files, run the script shipped with this kit:</p>
+  <div class="cmd">sh verify.sh</div>
+  <p>It checks the key fingerprint, verifies the signature, and checks the file hashes. If any step
+    fails, <b>stop</b> — the release is fake or tampered.</p>
+
+  <h2>Verify it — manually</h2>
+  <p>Requires <code>gpg</code> (GnuPG) and <code>sha256sum</code> — standard on Linux/macOS.</p>
+  <div class="step"><div class="n">1</div><div>
+    <b>Import the key and confirm the fingerprint</b> matches the one above.
+    <div class="cmd">gpg --import key.asc
+gpg --show-keys key.asc</div>
+  </div></div>
+  <div class="step"><div class="n">2</div><div>
+    <b>Verify the signature over the checksums</b> (expect: “Good signature”).
+    <div class="cmd">gpg --verify SHA256SUMS.asc SHA256SUMS</div>
+  </div></div>
+  <div class="step"><div class="n">3</div><div>
+    <b>Check the files against the signed hashes.</b>
+    <div class="cmd">sha256sum -c SHA256SUMS</div>
+  </div></div>
+
+  <h2>How the footage is trusted</h2>
+  <p>The signed <code>SHA256SUMS</code> pins the <b>media torrent</b>. Once you have that verified
+    torrent, <b>BitTorrent verifies every one of the 167,000+ media files piece-by-piece</b> as they
+    download — so an altered file simply won't match. The chain of trust:</p>
+  <div class="callout">your trusted key → signed <code>SHA256SUMS</code> → authentic <code>.torrent</code> → BitTorrent-verified media</div>
+
+  <h2>Two rules that keep you (and sources) safe</h2>
+  <ul>
+    <li><b>Never upload footage to a mirror.</b> Submissions go only through the project's official,
+      verified channel. This kit has no upload form on purpose.</li>
+    <li><b>The signature is the source of truth</b> — not how official a mirror looks. Fakes copy the
+      design; they can't copy the key.</li>
+  </ul>
+</div>
+
+</body>
+</html>
