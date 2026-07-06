@@ -1,0 +1,51 @@
+:root{ --text:#e9e5db; --text-dim:#a9a9b0; --text-muted:#8b8d94; --green:#3fb950; --card:#141619; --bg:#0e1013; }
+
+.submit-page { max-width: 820px; margin: 0 auto; padding: 60px 24px 80px; }
+    .submit-page h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+    .submit-page h1 span { color: var(--accent); }
+    .lead {
+      font-size: 1.05rem; color: var(--text-muted); line-height: 1.7;
+      margin-bottom: 30px; border-left: 3px solid var(--accent); padding-left: 18px;
+    }
+    .callout { background: var(--surface2); border-radius: 8px; padding: 16px 20px; font-size: .88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
+    .callout b { color: var(--text); }
+    .callout a { color: var(--accent); }
+    .dom-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 2px; }
+    .dom { font-family: 'JetBrains Mono', monospace; font-size: .9rem; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--green); border-radius: 7px; padding: 9px 15px; }
+    .fp-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 28px; }
+    .fp-box .lbl { font-family: 'JetBrains Mono', monospace; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .fp { font-family: 'JetBrains Mono', monospace; font-size: .95rem; color: var(--green); letter-spacing: .04em; word-break: break-all; }
+    .steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; counter-reset: s; }
+    .step { display: flex; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+    .step .num { counter-increment: s; flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: .9rem; }
+    .step .num::before { content: counter(s); }
+    .step h3 { font-size: 1rem; margin-bottom: 5px; color: var(--text); }
+    .step p { font-size: .88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 9px; }
+    .cmd { background: #0a0a0a; border: 1px solid var(--border); border-radius: 6px; padding: 10px 13px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: #d8d8d8; overflow-x: auto; white-space: pre; }
+    .cmd .c { color: var(--green); }
+    .note-sm { margin-top: 9px; font-size: .82rem; color: var(--text-dim); line-height: 1.55; }
+    .note-sm b { color: var(--text-muted); }
+    .note-sm .ok { color: var(--green); }
+    .principle { background: linear-gradient(180deg, rgba(192,57,43,.08), transparent), var(--surface); border: 1px solid var(--accent); border-radius: 10px; padding: 20px 22px; margin-bottom: 24px; }
+    .principle h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--text); }
+    .principle p { font-size: .9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 8px; }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle b { color: var(--text); }
+    code { font-family: 'JetBrains Mono', monospace; color: var(--text); }
+    em { color: var(--text); font-style: italic; }
+    /* --- keep code blocks + fingerprint inside the screen (fixes mobile sideways-scroll) --- */
+    .submit-page { overflow-x: hidden; }
+    .step > div:last-child { min-width: 0; flex: 1 1 0; }
+    .cmd { max-width: 100%; }
+    .fp { overflow-wrap: anywhere; }
+    @media (max-width: 600px) {
+      .submit-page { padding: 40px 16px 64px; }
+      .submit-page h1 { font-size: 1.5rem; }
+      .lead { font-size: .98rem; padding-left: 14px; }
+      .fp { font-size: .8rem; letter-spacing: .02em; word-break: break-word; }
+      .fp-box { padding: 15px 16px; }
+      .callout, .principle { padding-left: 16px; padding-right: 16px; }
+      .step { padding: 15px 15px; gap: 12px; }
+      .step .num { width: 26px; height: 26px; font-size: .82rem; }
+      .cmd { font-size: .74rem; padding: 9px 11px; }
+    }

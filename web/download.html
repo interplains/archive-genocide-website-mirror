@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="robots" content="index, follow">
-  <title>Download &amp; Seed — Archive Genocide Website Mirror</title>
+  <title>Download — Archive Genocide Website Mirror</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/download.css">
 </head>
 <body>
 
@@ -24,52 +24,356 @@
   </div>
 </nav>
 
-<div class="page">
-  <h1>Download &amp; <span>seed</span></h1>
-  <p class="lead">The entire archive is distributed as one signed BitTorrent release. Downloading it lets you
-    run this viewer with real footage — and seeding it keeps the evidence alive. Every seeder is another copy
-    that can't be erased.</p>
+<div class="submit-page">
 
-  <h2>The media release</h2>
-  <p>~864 GB, 167,000+ files, GPG-signed.</p>
-  <p class="dl-links">
-    <a class="dl-btn primary" href="magnet:?xt=urn:btih:9d16c2f6f67e3b37afab3a1c82e67b1314053b6e&amp;dn=archivegenocide-media&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fopen.tracker.cc%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&amp;tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">🧲 Magnet link</a>
-    <a class="dl-btn" href="https://archivegenocide.com/archivegenocide-media.torrent" target="_blank" rel="noopener noreferrer nofollow">⬇ .torrent file</a>
+  <h1>Download <span>Archives</span></h1>
+
+  <p class="lead">
+    Start here: the complete curated archive and the website itself, published as signed torrents. Below
+    them, the full raw source volumes (~2.4&nbsp;TB) mirrored on DDoSecrets. Everything on this page is
+    free to download, mirror, and re-share — that is how the evidence stays permanent.
   </p>
-  <p class="dl-verify">Verify files:
-    <a href="https://archivegenocide.com/SHA256SUMS" target="_blank" rel="noopener noreferrer nofollow">SHA256SUMS</a> ·
-    <a href="https://archivegenocide.com/SHA256SUMS.asc" target="_blank" rel="noopener noreferrer nofollow">SHA256SUMS.asc</a> ·
-    <a href="https://archivegenocide.com/key.asc" target="_blank" rel="noopener noreferrer nofollow">key.asc</a> ·
-    <a href="https://archivegenocide.com/MAGNET.txt" target="_blank" rel="noopener noreferrer nofollow">MAGNET.txt</a></p>
-  <p>Get the release files, verify them, then:</p>
-  <div class="step"><div class="n">1</div><div>
-    <b>Verify it's genuine</b> before you trust it — see the <a href="verify.html">verification guide</a>
-    (or run <code>sh verify.sh</code>).</div></div>
-  <div class="step"><div class="n">2</div><div>
-    <b>Load the torrent</b> in any BitTorrent client. It verifies every file piece-by-piece against the
-    signed <code>.torrent</code> as it downloads.</div></div>
-  <div class="step"><div class="n">3</div><div>
-    <b>Point this viewer at it.</b> Put the downloaded <code>archivegenocide-media/</code> folder next to the
-    kit (or set <code>MEDIA_DIR</code>) and run it — see the kit's README.</div></div>
 
-  <div class="callout">
-    <b>Infohash</b> (BitTorrent v1):
-    <div class="fp">9d16c2f6&nbsp;f67e3b37&nbsp;afab3a1c&nbsp;82e67b13&nbsp;14053b6e</div>
-    Cross-check this against the official site before loading the torrent.
+  <!-- CONTENT WARNING -->
+  <div class="warning-box">
+    <div class="wh">⚠ Content warning — graphic material</div>
+    <p>
+      These archives contain raw, <strong>uncensored documentation of extreme violence,
+      death, severe injury, and genocide</strong>. Much of the footage is deeply disturbing.
+      It is preserved for evidentiary, research, journalistic, and legal-accountability
+      purposes. <strong>Viewer discretion is strongly advised.</strong> By downloading you
+      acknowledge the nature of this material.
+    </p>
   </div>
 
-  <h2>Keep it alive</h2>
-  <p>The archive survives because people re-host and re-seed it. If you can:</p>
-  <ul>
-    <li><b>Seed the torrent</b> — leave it running in your client after downloading.</li>
-    <li><b>Run a mirror</b> — this whole kit is open-source; host a copy so the site itself can't be taken down.</li>
-  </ul>
-
-  <div class="callout">
-    <b>Have footage to contribute?</b> Submissions go <b>only</b> through the project's official, verified
-    channel — never through a mirror. This copy has no upload form on purpose, to protect both you and the
-    integrity of the evidence.
+  <!-- ============ OFFICIAL SIGNED RELEASES ============ -->
+  <div class="official-head">
+    <h2>The Complete Archive</h2>
+    <span class="pill-signed">✓ signed release</span>
   </div>
+  <p class="official-sub">
+    Two official torrents, cryptographically signed by us. The first is the entire curated collection
+    exactly as shown on the live site; the second is the website itself, so anyone can re-host the archive.
+    Both verify against our signing key — see <a href="/verify.html">how to verify</a>.
+  </p>
+
+  <div class="rel-list">
+
+    <div class="rel-card">
+      <div class="rel-top">
+        <div class="rel-name">Download the Website Media Files <span class="rel-kind">torrent · media</span></div>
+        <div class="rel-meta"><b>807 GB</b><br>167,114 files</div>
+      </div>
+      <p class="rel-desc">
+        The full deduplicated archive of documented war crimes across Gaza and the West Bank (2023–2026) —
+        every video and photo shown on the live site, curated and in scope, as a single torrent.
+      </p>
+      <div class="rel-btns">
+        <a class="btn btn-magnet" href="magnet:?xt=urn:btih:9d16c2f6f67e3b37afab3a1c82e67b1314053b6e&amp;dn=archivegenocide-media&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fopen.tracker.cc%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&amp;tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce">🧲 Magnet link</a>
+        <a class="btn btn-file" href="/archivegenocide-media.torrent">⬇ .torrent file</a>
+        <a class="btn btn-verify" href="/verify.html">✓ Verify</a>
+      </div>
+      <p class="rel-desc">
+        💡 <b>Slow to start?</b> That's normal for a new torrent — BitTorrent gets faster as more people join. Please be patient; the download speed climbs as the swarm grows.
+      </p>
+      <div class="verify-strip">
+        <div class="vs-title">✓ verify this release</div>
+        <div class="vs-links">
+          <a class="chip" href="/SHA256SUMS"><span class="k">SHA256SUMS</span></a>
+          <a class="chip" href="/SHA256SUMS.asc"><span class="k">SHA256SUMS.asc</span> signature</a>
+        </div>
+        <div class="hash">signed by key <b>C24E · C92B · … · A53C</b> &nbsp;·&nbsp; <a href="/verify.html">how to verify →</a></div>
+      </div>
+    </div>
+
+    <div class="rel-card">
+      <div class="rel-top">
+        <div class="rel-name">Website &amp; Source Code <span class="rel-kind">torrent · code + data</span> <span class="pill-soon">🔒 coming soon</span></div>
+        <div class="rel-meta"><b>—</b><br>site + gallery data</div>
+      </div>
+      <p class="rel-desc">
+        The complete open-source website — front-end, servers, and the gallery metadata for all 94,000+
+        entries — so anyone can stand up a full working mirror of this archive. Point it at the media
+        torrent above and it runs.
+      </p>
+      <div class="rel-btns">
+        <span class="btn btn-soon" aria-disabled="true">🔒 Coming soon</span>
+      </div>
+      <div class="soon-note">
+        <b>Not released yet.</b> The website &amp; source code will be published here — signed, with a magnet
+        link and checksums — when the project is open-sourced. Watch our
+        <a href="https://t.me/+Fo6vcMwk3xkwYzRk" target="_blank" rel="noopener">Telegram</a> or
+        <a href="#" target="_blank" rel="noopener">Twitter</a> for the announcement.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="official-callout">
+    <b>One key signs everything.</b> Every official release is signed by the same Archive Genocide key.
+    Don't trust a download because a page looks right — <b>verify the files against the key</b>. Full
+    instructions and the fingerprint are on the <a href="/verify.html">Verify</a> page.
+  </div>
+
+  <!-- ============ FULL SOURCE VOLUMES ============ -->
+  <div class="sec-rule">
+    <h2>Full Source Volumes</h2><div class="ln"></div><div class="sz">~2.4 TB · DDoSecrets</div>
+  </div>
+
+  <p class="lead">
+    The complete raw source archives behind this project are preserved and freely available for download.
+    To keep this evidence permanently accessible and beyond the reach of takedowns, all volumes are mirrored on
+    <a href="https://ddosecrets.org" target="_blank" rel="noopener">Distributed Denial of Secrets (DDoSecrets)</a>
+    and distributed by torrent — for journalists, researchers, and legal teams pursuing accountability.
+  </p>
+
+  <div class="total-note">
+    <strong>~2.4 TB total across five volumes.</strong> Each volume is a torrent hosted on
+    DDoSecrets — you'll need a torrent client (e.g. qBittorrent or Transmission). Please
+    <strong>keep seeding</strong> after downloading so the archive stays alive for others.
+    If a DDoSecrets link is down, use the grey <strong>Torrent file (mirror)</strong> button
+    next to it — it serves the same <code>.torrent</code> from our own backup.
+  </div>
+
+  <div class="archive-list">
+
+    <div class="archive-card">
+      <div class="archive-head">
+        <div class="archive-name">Gaza Volume 1</div>
+        <div class="archive-size">384 GB</div>
+      </div>
+      <div class="archive-desc">
+        Mixed early backups and footage collections — the Evidence Task channel (Nov 2024
+        pull), the <em>eye.on.palestine</em> Instagram account, the full <em>tiktokgenocide.com</em>
+        website, Twitter/X profile backups (including soldier/perpetrator tracking), and
+        assorted supporting datasets. The broadest, most heterogeneous volume.
+      </div>
+      <div class="archive-btns">
+        <a class="btn-torrent" href="https://ddosecrets.org/article/gaza-volume-01" target="_blank" rel="noopener">⬇ Download via DDoSecrets ↗</a>
+        <a class="btn-mirror" href="https://drive.proton.me/urls/B2RJ11DB2C#Eb7JePTCc6iL" target="_blank" rel="noopener">⬇ Torrent file (mirror) ↗</a>
+      </div>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head">
+        <div class="archive-name">Gaza Volume 2</div>
+        <div class="archive-size">67 GB</div>
+      </div>
+      <div class="archive-desc">
+        A supplementary consolidated volume of additional Gaza war-crimes footage gathered
+        across multiple sources.
+      </div>
+      <div class="archive-btns">
+        <a class="btn-torrent" href="https://ddosecrets.org/article/gaza-volume-02" target="_blank" rel="noopener">⬇ Download via DDoSecrets ↗</a>
+        <a class="btn-mirror" href="https://drive.proton.me/urls/KYXV8PD4HW#hL7SyvpDBm1J" target="_blank" rel="noopener">⬇ Torrent file (mirror) ↗</a>
+      </div>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head">
+        <div class="archive-name">Gaza Volume 3</div>
+        <div class="archive-size">910 GB</div>
+      </div>
+      <div class="archive-desc">
+        Twitter/X and Instagram journalist archives — including Anas Al Sharif, Gaza
+        Notification, Motassem Al Dalloul, Times of Gaza, Sarah Wilkinson, Quds News and
+        The Cradle, plus a collection of roughly 99 Instagram journalist accounts. The
+        largest volume.
+      </div>
+      <div class="archive-btns">
+        <a class="btn-torrent" href="https://ddosecrets.org/article/gaza-volume-03" target="_blank" rel="noopener">⬇ Download via DDoSecrets ↗</a>
+        <a class="btn-mirror" href="https://drive.proton.me/urls/JTX0V6M504#LZKxCzanlNQN" target="_blank" rel="noopener">⬇ Torrent file (mirror) ↗</a>
+      </div>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head">
+        <div class="archive-name">Gaza Volume 4</div>
+        <div class="archive-size">710 GB</div>
+      </div>
+      <div class="archive-desc">
+        The full <strong>Evidence Task</strong> Telegram channel backup — tens of thousands
+        of videos documenting war crimes across Gaza and the West Bank (Oct 2023 – Jun 2025),
+        alongside news clips and soldier/perpetrator information.
+      </div>
+      <div class="archive-btns">
+        <a class="btn-torrent" href="https://ddosecrets.org/article/gaza-volume-04" target="_blank" rel="noopener">⬇ Download via DDoSecrets ↗</a>
+        <a class="btn-mirror" href="https://drive.proton.me/urls/X9WD7SFZYG#Sk0svwwhWcKC" target="_blank" rel="noopener">⬇ Torrent file (mirror) ↗</a>
+      </div>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head">
+        <div class="archive-name">Gaza Volume 5</div>
+        <div class="archive-size">553 GB</div>
+      </div>
+      <div class="archive-desc">
+        A large collection of Telegram channel backups — Suppressed News, Dr Hashem Al
+        Shehari, Journalist Moad Al Hams, Anas Al Sharif, Palestinian Observer, RNN
+        Prisoners, Gaza Real News, Alnasht, The Children of Gaza, and Israel Exposed — plus
+        geolocation datasets.
+      </div>
+      <div class="archive-btns">
+        <a class="btn-torrent" href="https://ddosecrets.org/article/gaza-volume-05" target="_blank" rel="noopener">⬇ Download via DDoSecrets ↗</a>
+        <a class="btn-mirror" href="https://drive.proton.me/urls/MAK2SKPFSC#Bo71wCpfdreZ" target="_blank" rel="noopener">⬇ Torrent file (mirror) ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <strong>Why torrents?</strong> Hosting terabytes of footage for direct download is
+    costly and easily taken offline. Torrents distribute the load across everyone who has a
+    copy, making the archive resilient and permanent. If a DDoSecrets link is slow, it will
+    still complete — and your client helps seed it to the next person.
+  </div>
+
+  <h1>Individual <span>Archives</span></h1>
+  <p class="lead">
+    Smaller, per-source backups — individual Telegram channels, Twitter/X accounts, and
+    Instagram journalists — hosted on Proton Drive. These are the building blocks behind the
+    volumes above; download just the source you need.
+  </p>
+
+  <div class="archive-list">
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Evidence Task (Telegram)</div></div>
+      <div class="archive-desc">War crimes, news, soldier information.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/P9ZFG94DT4#pQOAuw22o7ct" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">The Children of Gaza (Telegram)</div></div>
+      <div class="archive-desc">War crimes documentation.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/0FTDX8MZ3M#522n3npcpURQ" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Eye on Palestine (Instagram)</div></div>
+      <div class="archive-desc">War crimes, news and updates.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/ZXTPC144A4#BcXoSlA7JiBu" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">tiktokgenocide.com (website backup)</div></div>
+      <div class="archive-desc">War crimes, soldier information.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/WQTD54016G#6SWmKqQIiOxJ" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Israel Exposed (Discord)</div></div>
+      <div class="archive-desc">War crimes documentation.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/1XWNQY0020#nPz4rWd4ZARi" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Times of Gaza (Twitter/X)</div></div>
+      <div class="archive-desc">War crimes documentation.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/AJ041D1GCM#JaLm-RdWzGuw" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Gaza Notification (Twitter/X)</div></div>
+      <div class="archive-desc">War crimes, news.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/V7Y0PMEGDR#OFXttK9pbGy8" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Tracking Genocide (Telegram)</div></div>
+      <div class="archive-desc">Soldier information, war crimes.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/3K5CG0YSSR#q0qeqljluPIQ" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Anas Al Sharif (Twitter/X)</div></div>
+      <div class="archive-desc">War crimes, field reports.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/4JDP6YVBM4#-9k9O8A6qE1e" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Sarah Wilkinson (Twitter/X)</div></div>
+      <div class="archive-desc">War crimes, news, soldier information.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/CHP2MN6MDG#dfj1VcOlmTx-" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Evidence Task — Telegram (mirror)</div></div>
+      <div class="archive-desc">War crimes, soldier information.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/VCS87E8M8R#IXkAWkBUYTbQ" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Gaza Now (Telegram)</div></div>
+      <div class="archive-desc">News and testimony.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/MYPXYEZS8G#gC-0jGrGRsRa" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Evidence Task — Telegram (alt)</div></div>
+      <div class="archive-desc">War crimes, soldier information.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/D2M88X1E98#mujTdZp-4Xpz" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Motassem Al Dalloul (Twitter/X)</div></div>
+      <div class="archive-desc">War crimes, field reports.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/8YF5H22T10#znQpMTa-UWiC" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">Quds News Network (Telegram)</div></div>
+      <div class="archive-desc">News, war crimes.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/2YC3Z1TWAM#a5ifNh1JhRtP" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+    <div class="archive-card">
+      <div class="archive-head"><div class="archive-name">The Cradle (Twitter/X)</div></div>
+      <div class="archive-desc">Analysis, news, war crimes.</div>
+      <a class="btn-torrent" href="https://drive.proton.me/urls/QTT0Y7B5BW#BVwUiY2yf2OV" target="_blank" rel="noopener">Access Archive ↗</a>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> these per-source archives are mirrored on Proton Drive. If a link is
+    unavailable, the same footage is also contained within the Gaza Volumes above and in the
+    live <a href="/">Archive</a>.
+  </div>
+
+  <!-- TOR ONION MIRROR -->
+  <h1>Tor <span>Onion Mirror</span></h1>
+  <p class="lead">
+    For readers behind censorship, or anyone who wants maximum anonymity, the full live archive is
+    also served as a Tor onion service — independent of Cloudflare and the clearnet, with the server
+    location hidden. Same archive, reachable only over the Tor network.
+  </p>
+
+  <div>
+    http://oupeq4ovg5modl7vgchr3qh35fa3f2aa6hbs2zpv2gryvetwvzogzwad.onion
+  </div>
+
+  <div class="note">
+    <strong>How to open it</strong>
+    <ol>
+      <li>Install <strong>Tor Browser</strong> from <a href="https://www.torproject.org/download/" target="_blank" rel="noopener">torproject.org</a> — or use Brave's <em>&ldquo;New private window with Tor&rdquo;</em>. (A normal browser cannot open <code>.onion</code> links.)</li>
+      <li>Open it, click <strong>Connect</strong>, and wait for it to build a Tor circuit.</li>
+      <li>Copy the address above into the address bar and press Enter.</li>
+    </ol>
+    <p>
+      &#9203; <strong>The first load takes a minute or two.</strong> The archive is large and it downloads over
+      Tor with no CDN in front of it &mdash; this is normal, not an error. <strong>Once it has loaded the first
+      time, it&rsquo;s cached in your browser</strong>, so browsing and future visits are fast. (Videos stream
+      over Tor, so they&rsquo;ll be slower than on the clearnet site.)
+    </p>
+    <p>
+      If Tor won&rsquo;t connect &mdash; some networks block it &mdash; turn on a <strong>bridge</strong> in Tor
+      Browser: <em>Settings &rarr; Connection &rarr; Bridges &rarr; &ldquo;Select a Built-In Bridge&rdquo; &rarr; Snowflake</em>.
+      If <code>torproject.org</code> itself is blocked where you are, search <strong>&ldquo;GetTor&rdquo;</strong>
+      or email <strong>gettor@torproject.org</strong> for a mirror download.
+    </p>
+  </div>
+
 </div>
 
 </body>
