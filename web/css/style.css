@@ -85,6 +85,11 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .m-download { background: var(--accent); color: #fff; border: none; border-radius: 7px;
   padding: 8px 14px; font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; }
 .m-download:hover { filter: brightness(1.12); }
+.site-footer { background: transparent; border-top: 1px solid var(--border); margin-top: 48px;
+  padding: 40px 20px 56px; text-align: center; }
+.epigraph { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.15rem;
+  color: #cfcfcf; margin: 0 0 10px; line-height: 1.5; }
+.epigraph-attr { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
   background: #27ae60; color: #fff; padding: 10px 22px; border-radius: 6px; z-index: 9999;
   font-size: .9rem; font-weight: 500; pointer-events: none; }
