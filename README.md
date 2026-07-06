@@ -46,8 +46,24 @@ and won't even ask.)*
 python serve.py                                   # footage auto-detected next to serve.py
 MEDIA_DIR="/path/to/archivegenocide-media" python3 serve.py   # or point it anywhere
 ```
-To expose a mirror publicly, put it behind a normal web server / CDN (nginx, Caddy, a CDN
-pull-zone) rather than exposing this server directly.
+*(To let **other people** see your mirror, see **"Share it online"** just below.)*
+
+---
+
+## 📢 Share it online (let other people see your mirror)
+By default the mirror is visible only on your own computer. To share it — easiest first:
+
+- **Just want to help it survive?** Keep the footage **torrent seeding** in your torrent app.
+  That alone re-shares the footage so it can't be wiped out — no website needed.
+- **Want to give people a link right now?** One click:
+  - **Windows:** double-click **`share-online.cmd`** · **Mac/Linux:** run **`share-online.sh`**
+
+  It prints a public link (ending in `.trycloudflare.com`) you can paste to anyone. It's free,
+  needs no account, and **keeps your home IP address hidden.** Your computer serves it, so the
+  link works while your PC is on and that window stays open.
+- **Want a permanent, always-on mirror?** Rent a small cheap server — see **[`HOSTING.md`](HOSTING.md)**.
+
+Full details and trade-offs, in plain English: **[`HOSTING.md`](HOSTING.md)**.
 
 ---
 
