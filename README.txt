@@ -1,0 +1,69 @@
+WAR CRIMES ARCHIVE  —  run your own copy (mirror)
+==================================================
+
+This is a read-only copy of the archive that you can run on your own computer.
+The point: make the documentation impossible to erase. Anyone can host a copy, so
+no single takedown, host, or country can remove the evidence.
+
+You need three things together in this folder:
+   1) this code            (you already have it)
+   2) the DATA files    ->  put them in the  data\  folder        (from the release)
+   3) the FOOTAGE       ->  the  "archivegenocide-media"  folder   (from the torrent)
+
+
+--------------------------------------------------------------------
+EASIEST WAY  —  let Claude Code set it up for you
+--------------------------------------------------------------------
+If you have Claude Code (https://claude.ai/code), open it in this folder and say:
+
+      read claudeinstall.md and set up the mirror for me
+
+It checks everything, asks where your footage is, starts the server, and opens it
+in your browser. You don't have to touch any code.
+
+
+--------------------------------------------------------------------
+NO CLAUDE?  —  just double-click
+--------------------------------------------------------------------
+   Windows:      double-click   Start Mirror.cmd
+   Mac / Linux:  run            start-mirror.sh    (or:  bash start-mirror.sh)
+
+It asks you to point to your footage folder, then opens the archive in your browser at
+   http://localhost:8000
+Keep the window open while you use it; close it to stop.
+
+Tip: if you put the "archivegenocide-media" folder right next to this file, it's found
+automatically and you won't even be asked.
+
+
+--------------------------------------------------------------------
+MANUAL (advanced)  —  needs Python 3
+--------------------------------------------------------------------
+From this folder:
+
+      python serve.py
+
+If your footage is somewhere else, point to it:
+
+      Windows:    set "MEDIA_DIR=D:\path\to\archivegenocide-media" && python serve.py
+      Mac/Linux:  MEDIA_DIR="/path/to/archivegenocide-media" python3 serve.py
+
+To put a mirror on the public internet, run it behind a normal web server or CDN
+(nginx, Caddy, a CDN pull-zone, etc.) rather than exposing this directly.
+
+
+--------------------------------------------------------------------
+IS IT REAL / IS IT SAFE?
+--------------------------------------------------------------------
+Anyone can copy this, so VERIFY a download before trusting it — see VERIFY.md, or run:
+
+      sh verify.sh
+
+Two rules that keep you and sources safe:
+   * NEVER upload footage to a mirror. This copy has no upload form on purpose.
+   * The cryptographic SIGNATURE is what proves a copy is genuine — not how it looks.
+
+This viewer is read-only: no admin, no login, no uploads, no tracking, and it makes no
+connection to the internet. Everything is served from your own computer.
+
+License: MIT (see LICENSE).
