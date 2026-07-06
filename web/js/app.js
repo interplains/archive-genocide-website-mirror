@@ -281,6 +281,8 @@ function openModal(i) {
   const link = document.getElementById('m-link');
   if (e.post_url && /^https?:\/\//.test(e.post_url)) { link.href = e.post_url; link.style.display = ''; }
   else link.style.display = 'none';
+  const dl = document.getElementById('m-download');   // media is local to this mirror -> free to offer
+  if (dl) { dl.href = mediaUrl(e); dl.setAttribute('download', (e.file || 'media').split('/').pop()); }
   document.getElementById('modal').style.display = 'flex';
   if (e) setHash(e.id);
 }
