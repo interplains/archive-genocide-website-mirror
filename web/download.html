@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>Download &amp; Seed — War Crimes Archive Mirror</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">War Crimes Archive <span class="mirror-tag">mirror</span></a>
+  <div class="nav-links">
+    <a href="index.html">Gallery</a>
+    <a href="map.html">Map</a>
+    <a href="sources.html">Sources</a>
+    <a href="victims.html">Victims</a>
+    <a href="download.html" class="active">Download</a>
+    <a href="verify.html">Verify</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1>Download &amp; <span>seed</span></h1>
+  <p class="lead">The entire archive is distributed as one signed BitTorrent release. Downloading it lets you
+    run this viewer with real footage — and seeding it keeps the evidence alive. Every seeder is another copy
+    that can't be erased.</p>
+
+  <h2>The media release</h2>
+  <p>~864 GB, 167,000+ files, GPG-signed. Get the <code>.torrent</code>, <code>MAGNET.txt</code>,
+    <code>SHA256SUMS</code>, <code>SHA256SUMS.asc</code>, and <code>key.asc</code> from the release, then:</p>
+  <div class="step"><div class="n">1</div><div>
+    <b>Verify it's genuine</b> before you trust it — see the <a href="verify.html">verification guide</a>
+    (or run <code>sh verify.sh</code>).</div></div>
+  <div class="step"><div class="n">2</div><div>
+    <b>Load the torrent</b> in any BitTorrent client. It verifies every file piece-by-piece against the
+    signed <code>.torrent</code> as it downloads.</div></div>
+  <div class="step"><div class="n">3</div><div>
+    <b>Point this viewer at it.</b> Put the downloaded <code>archivegenocide-media/</code> folder next to the
+    kit (or set <code>MEDIA_DIR</code>) and run it — see the kit's README.</div></div>
+
+  <div class="callout">
+    <b>Infohash</b> (BitTorrent v1):
+    <div class="fp">9d16c2f6&nbsp;f67e3b37&nbsp;afab3a1c&nbsp;82e67b13&nbsp;14053b6e</div>
+    Cross-check this against the official site before loading the torrent.
+  </div>
+
+  <h2>Keep it alive</h2>
+  <p>The archive survives because people re-host and re-seed it. If you can:</p>
+  <ul>
+    <li><b>Seed the torrent</b> — leave it running in your client after downloading.</li>
+    <li><b>Run a mirror</b> — this whole kit is open-source; host a copy so the site itself can't be taken down.</li>
+  </ul>
+
+  <div class="callout">
+    <b>Have footage to contribute?</b> Submissions go <b>only</b> through the project's official, verified
+    channel — never through a mirror. This copy has no upload form on purpose, to protect both you and the
+    integrity of the evidence.
+  </div>
+</div>
+
+</body>
+</html>

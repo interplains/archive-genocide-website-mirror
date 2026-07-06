@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>Killed in Gaza — War Crimes Archive Mirror</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">War Crimes Archive <span class="mirror-tag">mirror</span></a>
+  <div class="nav-links">
+    <a href="index.html">Gallery</a>
+    <a href="map.html">Map</a>
+    <a href="sources.html">Sources</a>
+    <a href="victims.html" class="active">Victims</a>
+    <a href="download.html">Download</a>
+    <a href="verify.html">Verify</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1>Killed in <span>Gaza</span></h1>
+  <p class="lead">A named record of <b id="v-total">…</b> people identified as killed in Gaza. Source: the
+    Gaza Ministry of Health's identified-victims list, via Tech for Palestine. Behind the footage in this
+    archive are people — these are some of their names.</p>
+
+  <input type="search" id="v-search" placeholder="Search a name (English or Arabic)…" autocomplete="off" spellcheck="false">
+  <div id="v-count" class="v-count-lbl"></div>
+  <div id="v-list" class="v-grid"></div>
+  <div class="v-more-wrap"><button id="v-more" class="v-more" type="button">Show more</button></div>
+</div>
+
+<script src="js/victims.js"></script>
+</body>
+</html>

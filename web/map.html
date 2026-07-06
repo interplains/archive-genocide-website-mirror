@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>Map — War Crimes Archive Mirror</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">War Crimes Archive <span class="mirror-tag">mirror</span></a>
+  <div class="nav-links">
+    <a href="index.html">Gallery</a>
+    <a href="map.html" class="active">Map</a>
+    <a href="sources.html">Sources</a>
+    <a href="victims.html">Victims</a>
+    <a href="download.html">Download</a>
+    <a href="verify.html">Verify</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1>Where the footage is <span>from</span></h1>
+  <p class="lead">The archive carries no GPS data, so this counts clips whose captions name each area — a
+    rough picture of where the documentation is concentrated (<b id="map-total">…</b> located mentions).
+    Click a region to open its footage.</p>
+
+  <div class="map-wrap">
+    <svg viewBox="0 0 480 340" class="gaza-map" role="img" aria-label="Schematic map of Gaza governorates and the West Bank">
+      <text x="26" y="185" class="sea" transform="rotate(-79 26 185)">Mediterranean Sea</text>
+
+      <polygon id="r-north-gaza"    class="region" points="95,45 150,45 145,95 85,95"/>
+      <polygon id="r-gaza-city"     class="region" points="85,95 145,95 140,150 75,150"/>
+      <polygon id="r-deir-al-balah" class="region" points="75,150 140,150 132,205 63,205"/>
+      <polygon id="r-khan-younis"   class="region" points="63,205 132,205 122,260 52,260"/>
+      <polygon id="r-rafah"         class="region" points="52,260 122,260 112,305 42,305"/>
+
+      <polygon id="r-west-bank"     class="region" points="330,68 402,58 430,120 405,182 344,180 314,120"/>
+
+      <text x="168" y="74"  class="rlabel">North Gaza <tspan class="rcount" id="c-north-gaza">–</tspan></text>
+      <text x="164" y="127" class="rlabel">Gaza City <tspan class="rcount" id="c-gaza-city">–</tspan></text>
+      <text x="158" y="182" class="rlabel">Deir al-Balah <tspan class="rcount" id="c-deir-al-balah">–</tspan></text>
+      <text x="150" y="237" class="rlabel">Khan Younis <tspan class="rcount" id="c-khan-younis">–</tspan></text>
+      <text x="138" y="288" class="rlabel">Rafah <tspan class="rcount" id="c-rafah">–</tspan></text>
+      <text x="346" y="118" class="rlabel">West Bank <tspan class="rcount" id="c-west-bank">–</tspan></text>
+    </svg>
+  </div>
+
+  <p id="map-note" class="map-note">Counts are derived from place names in each clip's caption; a clip may
+    mention more than one area, and roughly half of clips name no location at all. This is an indication of
+    coverage, not a precise incident map.</p>
+</div>
+
+<script src="js/map.js"></script>
+</body>
+</html>

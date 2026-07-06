@@ -106,6 +106,8 @@ async function loadData() {
     ]);
     allEntries = high;
     fillArchives(meta);
+    const _q = new URLSearchParams(location.search).get('q');
+    if (_q) { const s = document.getElementById('f-search'); if (s) s.value = _q; }
     applyFilters();
     tryOpenPending();
     // Load the rest (non-high) in the background so first paint is fast.
