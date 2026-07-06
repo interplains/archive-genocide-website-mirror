@@ -56,6 +56,9 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
   color: #fff; font-size: .72rem; padding: 2px 7px; border-radius: 4px; }
 .cap { padding: 9px 11px; font-size: .82rem; color: #cfcfcf; line-height: 1.4;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card-date { padding: 9px 11px 0; font-size: .72rem; color: var(--muted);
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace; }
+.card-date + .cap { padding-top: 4px; }
 
 .pager { max-width: 1200px; margin: 0 auto 60px; padding: 0 20px;
   display: flex; gap: 14px; align-items: center; justify-content: center; }
@@ -144,6 +147,15 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
   padding: 10px 20px; font-size: .88rem; cursor: pointer; }
 .v-more:hover { border-color: var(--accent); }
 .msg { color: var(--muted); text-align: center; padding: 40px 0; }
+.v-search-box { padding: 9px 13px; margin: 6px 0 14px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; color: #fff; font-size: .9rem; width: 100%; max-width: 300px; }
+.v-grid-dense { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px; font-size: .75rem; line-height: 1.4; }
+.v-tile { background: var(--surface); border: 1px solid var(--border); padding: 7px 9px; border-radius: 5px; color: #cfcfcf; }
+.v-pagination { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0; }
+.v-pagination button { padding: 6px 11px; background: var(--surface); color: #ddd; border: 1px solid var(--border);
+  border-radius: 5px; cursor: pointer; font-size: .8rem; font-family: inherit; }
+.v-pagination button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.v-pagination button:hover { border-color: var(--accent); }
 
 /* ---- map ---- */
 .map-wrap { display: flex; justify-content: center; margin: 10px 0 6px; }
@@ -154,6 +166,9 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .gaza-map .rcount { fill: var(--accent); font-weight: 700; }
 .gaza-map .sea { fill: #5b7a99; font-size: 10px; letter-spacing: .12em; }
 .map-note { color: var(--muted); font-size: .82rem; margin-top: 14px; }
+.map-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 42px 24px; text-align: center; margin: 26px 0; }
+.map-card p { color: var(--muted); margin: 0 0 22px; }
 
 /* ---- download links ---- */
 .dl-links { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 14px; }

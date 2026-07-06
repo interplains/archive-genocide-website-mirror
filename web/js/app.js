@@ -15,6 +15,7 @@ const mediaUrl  = e => MEDIA_HOST + mediaBase(e) + encPath(e.file);
 const thumbUrl  = e => e.thumbnail ? MEDIA_HOST + mediaBase(e) + encPath(e.thumbnail) : '';
 const esc = s => (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const truncate = (s, n) => s.length > n ? s.slice(0, n).trim() + '…' : s;
+const fmtDate = iso => { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); } catch (e) { return iso.slice(0, 10); } };
 
 let allEntries = [], filtered = [], page = 1, restLoaded = false, modalIndex = -1;
 
@@ -221,6 +222,7 @@ function render() {
   grid.innerHTML = slice.map((e, i) => {
     const idx = (page - 1) * PAGE_SIZE + i;
     const cap = truncate(cardText(e), 120);
+    const date = fmtDate(e.timestamp);
     const badge = e.type === 'video' ? '▶' : '▣';
     const t = thumbUrl(e);
     return `<div class="card" data-i="${idx}">
@@ -228,6 +230,7 @@ function render() {
         ${t ? `<img class="thumb" loading="lazy" src="${esc(t)}" alt="">` : ''}
         <span class="badge">${badge}${e.duration ? ' ' + esc(e.duration) : ''}</span>
       </div>
+      ${date ? `<div class="card-date">${esc(date)}</div>` : ''}
       ${cap ? `<div class="cap">${esc(cap)}</div>` : ''}
     </div>`;
   }).join('') || '<p class="msg">No items match your filters.</p>';

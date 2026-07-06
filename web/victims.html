@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="robots" content="index, follow">
-  <title>Killed in Gaza — Archive Genocide Website Mirror</title>
+  <title>Victims — Archive Genocide Website Mirror</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -25,15 +25,14 @@
 </nav>
 
 <div class="page">
-  <h1>Killed in <span>Gaza</span></h1>
-  <p class="lead">A named record of <b id="v-total">…</b> people identified as killed in Gaza. Source: the
-    Gaza Ministry of Health's identified-victims list, via Tech for Palestine. Behind the footage in this
-    archive are people — these are some of their names.</p>
+  <h1>Victims of the Gaza <span>Genocide</span></h1>
+  <p class="lead">This list is sourced from official releases by the Gaza Ministry of Health and compiled by
+    Tech for Palestine — <b id="v-total">…</b> people identified. Download the full source:
+    <a href="https://data.techforpalestine.org/api/v2/killed-in-gaza.min.json" target="_blank" rel="noopener noreferrer nofollow">Full JSON ↗</a></p>
 
-  <input type="search" id="v-search" placeholder="Search a name (English or Arabic)…" autocomplete="off" spellcheck="false">
-  <div id="v-count" class="v-count-lbl"></div>
-  <div id="v-list" class="v-grid"></div>
-  <div class="v-more-wrap"><button id="v-more" class="v-more" type="button">Show more</button></div>
+  <input type="search" id="v-search" class="v-search-box" placeholder="Search name…" autocomplete="off" spellcheck="false">
+  <div class="v-pagination" id="v-pagination"></div>
+  <div class="v-grid-dense" id="v-grid"></div>
 </div>
 
 <script src="js/victims.js"></script>

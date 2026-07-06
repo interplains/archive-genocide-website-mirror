@@ -1,0 +1,187 @@
+/* Live-site Sources styles, ported (loaded only by sources.html). */
+:root{ --text:#e9e5db; --text-muted:#8b8d94; --accent-hover:#d64550; --card:#141619; --bg:#0e1013; }
+.news-item{ text-decoration:none; display:block; } .news-item strong{ color:#eee; }
+.src-hidden{ display:none !important; }
+
+.sources-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-muted); font-size: .85rem; text-decoration: none;
+      margin-bottom: 36px;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .sources-header { margin-bottom: 40px; }
+    .sources-header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; }
+    .sources-header h1 span { color: var(--accent); }
+    .sources-header p { color: var(--text-muted); font-size: .95rem; line-height: 1.7; max-width: 680px; }
+
+    /* SEARCH */
+    .sources-search {
+      position: relative; margin-bottom: 40px; max-width: 420px;
+    }
+    .sources-search input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 10px 14px 10px 38px; border-radius: 8px;
+      font-size: .9rem; font-family: inherit; outline: none;
+      transition: border-color .2s;
+    }
+    .sources-search input:focus { border-color: var(--accent); }
+    .sources-search .si { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: .9rem; opacity: .5; }
+
+    /* SECTION */
+    .src-section { margin-bottom: 52px; }
+    .src-section h2 {
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .src-section h2 .platform-icon { font-size: 1.2rem; }
+    .src-section h2 .count {
+      font-size: .72rem; font-weight: 600; background: var(--surface2);
+      color: var(--text-muted); padding: 2px 8px; border-radius: 10px;
+    }
+
+    /* ARCHIVE SOURCES */
+    .arch-intro { color: var(--text-muted); font-size: .9rem; line-height: 1.65; max-width: 720px; margin: -4px 0 18px; }
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+    .arch-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px; display: flex; flex-direction: column; gap: 5px;
+      text-decoration: none; transition: border-color .15s;
+    }
+    a.arch-card:hover { border-color: var(--accent); }
+    .arch-name { font-size: .9rem; font-weight: 600; color: var(--text); }
+    .arch-meta { font-size: .75rem; color: var(--text-muted); }
+    .arch-meta .plat { color: var(--text); font-weight: 600; }
+    .arch-note { font-size: .75rem; color: var(--text-muted); line-height: 1.4; }
+    .arch-link { font-size: .74rem; color: var(--text-muted); margin-top: 2px; }
+    a.arch-card:hover .arch-link { color: var(--accent); }
+
+    /* INSTAGRAM GRID */
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .ig-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 6px;
+      transition: border-color .15s;
+    }
+    .ig-card:hover { border-color: #555; }
+    .ig-card.notable { border-color: rgba(192,57,43,.4); }
+    .ig-card.notable:hover { border-color: var(--accent); }
+    .ig-handle {
+      font-size: .85rem; font-weight: 600; color: var(--text);
+      word-break: break-all;
+    }
+    .ig-name {
+      font-size: .78rem; color: var(--text-muted); line-height: 1.4;
+    }
+    .notable-badge {
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--accent); margin-bottom: 2px;
+    }
+    .ig-link {
+      margin-top: 4px; display: inline-flex; align-items: center; gap: 5px;
+      font-size: .75rem; color: var(--text-muted); text-decoration: none;
+      transition: color .15s;
+    }
+    .ig-link:hover { color: var(--text); }
+
+    /* TWITTER GRID */
+    .tw-grid {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tw-chip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 8px 14px;
+      font-size: .85rem; color: var(--text); text-decoration: none;
+      transition: border-color .15s, color .15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tw-chip:hover { border-color: #1d9bf0; color: #1d9bf0; }
+    .tw-chip .at { color: var(--text-muted); }
+
+    /* TELEGRAM LIST */
+    .tg-list {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .tg-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+      font-size: .88rem; transition: border-color .15s;
+    }
+    .tg-item:hover { border-color: #0088cc; color: #0088cc; }
+    .tg-handle { font-weight: 600; }
+    .tg-desc { font-size: .78rem; color: var(--text-muted); margin-left: auto; }
+
+    /* REDDIT CHIPS */
+    .reddit-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .reddit-chip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 8px 14px; font-size: .85rem;
+      text-decoration: none; color: var(--text); transition: border-color .15s, color .15s;
+    }
+    .reddit-chip:hover { border-color: #ff4500; color: #ff4500; }
+
+    /* NEWS LIST */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .news-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 14px;
+      font-size: .88rem; color: var(--text-muted);
+    }
+
+    /* WEBSITES GRID */
+    .web-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .web-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 5px;
+      transition: border-color .15s;
+    }
+    .web-card:hover { border-color: #555; }
+    .web-domain {
+      font-size: .88rem; font-weight: 600; color: var(--text); word-break: break-all;
+    }
+    .web-desc {
+      font-size: .78rem; color: var(--text-muted); line-height: 1.4; flex: 1;
+    }
+    .web-tag {
+      font-size: .62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; padding: 2px 7px; border-radius: 4px;
+      align-self: flex-start; margin-bottom: 2px;
+    }
+    .web-tag.journalism  { background: rgba(52,152,219,.15); color: #3498db; }
+    .web-tag.hr          { background: rgba(192,57,43,.15);  color: #c0392b; }
+    .web-tag.legal       { background: rgba(39,174,96,.15);  color: #27ae60; }
+    .web-tag.archive     { background: rgba(155,89,182,.15); color: #9b59b6; }
+    .web-link {
+      margin-top: 4px; display: inline-flex; align-items: center; gap: 5px;
+      font-size: .75rem; color: var(--text-muted); text-decoration: none;
+      transition: color .15s;
+    }
+    .web-link:hover { color: var(--text); }
+
+    /* HIDDEN by search */
+    .src-hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .ig-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    }
