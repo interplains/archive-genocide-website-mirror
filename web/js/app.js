@@ -246,11 +246,18 @@ function renderPager(pages) {
   if (pages <= 1) { p.innerHTML = ''; return; }
   p.innerHTML =
     `<button ${page <= 1 ? 'disabled' : ''} data-p="${page - 1}">‹ Prev</button>
-     <span>Page ${page} of ${pages}</span>
+     <span class="pg-jump">Page <input id="pg-input" type="number" min="1" max="${pages}"
+        value="${page}" aria-label="Go to page"> of ${pages} <button id="pg-go">Go</button></span>
      <button ${page >= pages ? 'disabled' : ''} data-p="${page + 1}">Next ›</button>`;
-  p.querySelectorAll('button[data-p]').forEach(b => b.addEventListener('click', () => {
-    page = +b.dataset.p; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
-  }));
+  const goTo = n => {
+    n = Math.min(pages, Math.max(1, n | 0));
+    if (n && n !== page) { page = n; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  };
+  p.querySelectorAll('button[data-p]').forEach(b =>
+    b.addEventListener('click', () => goTo(+b.dataset.p)));
+  const inp = document.getElementById('pg-input');
+  document.getElementById('pg-go').addEventListener('click', () => goTo(parseInt(inp.value, 10)));
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); goTo(parseInt(inp.value, 10)); } });
 }
 
 function setupModal() {

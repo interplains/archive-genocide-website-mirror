@@ -63,6 +63,13 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .pager { max-width: 1200px; margin: 0 auto 60px; padding: 0 20px;
   display: flex; gap: 14px; align-items: center; justify-content: center; }
 .pager span { color: var(--muted); font-size: .85rem; }
+.pager .pg-jump { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .85rem; }
+.pager .pg-jump input { width: 3.6em; padding: 5px 6px; text-align: center; color: var(--text);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font: inherit;
+  -moz-appearance: textfield; appearance: textfield; }
+.pager .pg-jump input::-webkit-outer-spin-button,
+.pager .pg-jump input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.pager .pg-jump button { padding: 5px 11px; }
 
 /* Lightbox */
 #modal { display: none; position: fixed; inset: 0; z-index: 900; background: rgba(0,0,0,.9);
