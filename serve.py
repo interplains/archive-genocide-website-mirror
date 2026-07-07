@@ -131,12 +131,15 @@ def _victim_age(p):
 
 def ensure_victims_chunks():
     """Sort victims.json youngest-first and split it into victims_NNNN.json + a victims_index.json manifest,
-    so the victims page paints its first page after one small chunk instead of the whole ~10 MB file. Same
-    idempotent + safe rules as ensure_chunks (acts only on the monolith, clears stale chunks, writes every
-    chunk before removing the source)."""
+    so the victims page paints its first page after one small chunk instead of the whole ~10 MB file.
+    victims.json is a BUNDLED repo file (unlike the gitignored gallery data), so it is KEPT, not deleted —
+    only the generated chunks are written; an mtime guard skips re-chunking when they're already current."""
     src = os.path.join(DATA, 'victims.json')
     if not os.path.isfile(src):
         return
+    vindex = os.path.join(DATA, 'victims_index.json')
+    if os.path.isfile(vindex) and os.path.getmtime(vindex) >= os.path.getmtime(src):
+        return                                       # chunks already current -> keep victims.json, skip re-work
     try:
         with open(src, encoding='utf-8') as f:
             raw = json.load(f)
@@ -165,10 +168,11 @@ def ensure_victims_chunks():
         with open(os.path.join(DATA, 'victims_index.json'), 'w', encoding='utf-8') as f:
             json.dump({'primary': names[0], 'rest': names[1:], 'total': len(data)}, f)
     except OSError:
-        return                                      # partial write -> keep victims.json so a retry re-chunks
-    if names:
-        try: os.remove(src)
-        except OSError: pass
+        return                                      # partial write -> a retry re-chunks on the next start
+    # victims.json is a BUNDLED repo file (unlike the gitignored gallery data) -> KEEP it; only the
+    # generated victims_*.json chunks are written. (The gallery splitter deletes its monolith because
+    # gallery_high.json is gitignored + would otherwise be double-discovered by build_index; neither
+    # applies here.)
 
 
 def build_index():
