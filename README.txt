@@ -6,7 +6,7 @@ The point: make the documentation impossible to erase. Anyone can host a copy, s
 no single takedown, host, or country can remove the evidence.
 
 >> Found a bug or something not working right? Please report it on Telegram:
-   https://t.me/+Fo6vcMwk3xkwYzRk   -- so we can fix it fast.
+   https://t.me/+UnS1eLkLxdtmYjBk   -- so we can fix it fast.
 
 You need three things together in this folder:
    1) this code            (you already have it)

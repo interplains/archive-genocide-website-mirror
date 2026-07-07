@@ -10,7 +10,7 @@ of the read-only viewer, deanonymize a visitor, or otherwise put people at risk 
 
 Reach the admins through our official Telegram:
 
-**https://t.me/+Fo6vcMwk3xkwYzRk**
+**https://t.me/+UnS1eLkLxdtmYjBk**
 
 Please include enough detail to reproduce it. We'll confirm the report, work on a fix, and —
 if you'd like — credit you once it's resolved. Please give us reasonable time to patch before

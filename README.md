@@ -8,7 +8,7 @@ This repo is the **viewer** (a tiny server + front-end). The **footage and galle
 are distributed separately as a signed torrent (they're huge and travel peer-to-peer, so
 anyone can re-seed them).
 
-> 🐛 **Something broken or not working right?** Please report it on **[Telegram](https://t.me/+Fo6vcMwk3xkwYzRk)** —
+> 🐛 **Something broken or not working right?** Please report it on **[Telegram](https://t.me/+UnS1eLkLxdtmYjBk)** —
 > bugs, rough edges, install snags, anything — so we can fix it fast.
 
 > 📄 Prefer plain text? Everything below is also in **[`README.txt`](README.txt)**.
