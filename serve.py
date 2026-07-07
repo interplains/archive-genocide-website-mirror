@@ -74,7 +74,7 @@ def _list_chunks():
 
 
 GALLERY_FIRST_CHUNK = 500    # tiny primary chunk -> near-instant first paint (~10 pages of buffer)
-GALLERY_CHUNK_SIZE  = 2000   # larger background chunks -> few files, fetched after first paint
+GALLERY_CHUNK_SIZE  = 8000   # few, large background chunks -> minimal per-request latency over a slow link
 
 
 def ensure_chunks():
@@ -119,7 +119,7 @@ def ensure_chunks():
 
 
 VICTIMS_FIRST_CHUNK = 2000    # first victims page(s) -> fast first paint
-VICTIMS_CHUNK_SIZE  = 10000   # larger background chunks
+VICTIMS_CHUNK_SIZE  = 25000   # few, large background chunks -> minimal per-request latency
 
 
 def _victim_age(p):
@@ -222,6 +222,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
+        # Cache the heavy, stable things (gallery/victims data + media + icons) so leaving a page and
+        # coming back doesn't re-download them -- this is a multi-page app, so each visit re-fetches.
+        # Code (js/css/html) is deliberately NOT cached here, so updates are never masked.
+        p = self.path.split('?', 1)[0].split('#', 1)[0].lower()
+        if p.endswith(('.json', '.jpg', '.jpeg', '.png', '.webp', '.gif',
+                       '.mp4', '.webm', '.mov', '.m4v', '.ico', '.woff2')):
+            self.send_header('Cache-Control', 'public, max-age=3600')
         super().end_headers()
 
     def log_message(self, *a):              # quiet

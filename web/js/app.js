@@ -113,20 +113,36 @@ async function loadData() {
   }
 }
 
-// Load the discovered chunks: the primary first (fast paint), the rest (incl. any volumes) in the background.
+// Robust chunk fetch: abort a slow/hung request and retry, so one bad chunk can't stall the whole load.
+function fetchJson(url, timeout = 30000, tries = 3) {
+  return (async () => {
+    for (let k = 0; k < tries; k++) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeout);
+      try {
+        const r = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (r.ok) return await r.json();
+      } catch (e) { clearTimeout(t); }
+    }
+    return [];
+  })();
+}
+
+// Load the discovered chunks: the primary first (fast paint), then the rest ONE AT A TIME in order,
+// merging + re-rendering after each so the list GROWS as it arrives. (A parallel burst just serializes
+// over a slow tunnel and shows no progress until it all lands.) mergeEntries only appends and nothing
+// re-sorts, so sequential-in-order keeps the pre-sorted gallery correct; keepPage keeps your page.
 async function loadFromManifest(m) {
   const primary = m.primary || (m.chunks && m.chunks[0]);
   const rest = (m.rest && m.rest.length) ? m.rest : (m.chunks || []).filter(c => c !== primary);
-  if (primary) mergeEntries(await fetch(primary).then(r => r.json()));
+  if (primary) mergeEntries(await fetchJson(primary));
   firstPaint();
-  // Fetch the rest in parallel, but MERGE IN MANIFEST ORDER — mergeEntries only appends and nothing
-  // re-sorts, so merging in completion order would scramble the pre-sorted gallery. Promise.all keeps
-  // results aligned to `rest` (which serve.py lists in sorted chunk order), preserving the order.
-  Promise.all(rest.map(url => fetch(url).then(r => r.ok ? r.json() : []).catch(() => [])))
-    .then(results => {
-      results.forEach(a => { if (Array.isArray(a) && a.length) mergeEntries(a); });
-      restLoaded = true; fillArchives(); applyFilters(); tryOpenPending();
-    });
+  for (const url of rest) {
+    const a = await fetchJson(url);
+    if (Array.isArray(a) && a.length) { mergeEntries(a); applyFilters(true); }
+  }
+  restLoaded = true; fillArchives(); applyFilters(true); tryOpenPending();
 }
 
 // Backward-compatible path for a mirror with no index.json (just the two legacy files).
@@ -179,7 +195,7 @@ function setupFilters() {
   });
 }
 
-function applyFilters() {
+function applyFilters(keepPage) {
   const q = document.getElementById('f-search').value.trim().toLowerCase();
   const conf = document.getElementById('f-conf').value;
   const type = document.getElementById('f-type').value;
@@ -210,7 +226,7 @@ function applyFilters() {
       if (j >= 0) modalIndex = j;
     }
   }
-  page = 1;
+  if (!keepPage) page = 1;
   render();
 }
 

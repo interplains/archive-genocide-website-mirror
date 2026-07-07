@@ -39,20 +39,33 @@ async function load() {
   } catch (e) { fail(); }
 }
 
-// Pre-sorted chunks: primary first (fast paint), the rest in the background in MANIFEST ORDER
-// (concatenation only; the data is already youngest-first, so order is preserved).
+// robust chunk fetch: abort a hung request + retry so one bad chunk can't stall the load
+function fetchJson(url, timeout = 30000, tries = 3) {
+  return (async () => {
+    for (let k = 0; k < tries; k++) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeout);
+      try { const r = await fetch(url, { signal: ctrl.signal }); clearTimeout(t); if (r.ok) return await r.json(); }
+      catch (e) { clearTimeout(t); }
+    }
+    return [];
+  })();
+}
+
+// Pre-sorted chunks: primary first (fast paint), then the rest ONE AT A TIME in manifest order,
+// re-rendering after each so the list GROWS as it arrives (data is youngest-first, so order holds).
 async function loadChunks(m) {
   if (m.total != null) document.getElementById('v-total').textContent = m.total.toLocaleString();
-  const first = await fetch(m.primary).then(r => r.ok ? r.json() : []).catch(() => []);
+  const first = await fetchJson(m.primary);
   if (Array.isArray(first)) all = all.concat(first);
   paged = chunk(all, PAGE); render(1);
-  const rest = m.rest || [];
-  Promise.all(rest.map(u => fetch(u).then(r => r.ok ? r.json() : []).catch(() => [])))
-    .then(parts => {
-      parts.forEach(p => { if (Array.isArray(p) && p.length) all = all.concat(p); });
-      paged = chunk(all, PAGE);
+  for (const u of (m.rest || [])) {
+    const p = await fetchJson(u);
+    if (Array.isArray(p) && p.length) {
+      all = all.concat(p); paged = chunk(all, PAGE);
       if (applySearch()) render(1); else render(curPage);   // re-apply an in-progress search over the full list
-    });
+    }
+  }
 }
 
 // Legacy: a single victims.json, sorted client-side (older data packs with no split).
