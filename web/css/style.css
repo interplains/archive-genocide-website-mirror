@@ -105,6 +105,7 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .nav-links a { color: var(--muted); text-decoration: none; font-size: .88rem; padding: 6px 12px; border-radius: 7px; }
 .nav-links a:hover { color: #eee; background: var(--surface); }
 .nav-links a.active { color: var(--accent); }
+.nav-toggle, .nav-burger { display: none; }
 
 /* ---- content pages (about / verify / sources) ---- */
 .page { max-width: 820px; margin: 0 auto; padding: 34px 22px 80px; }
@@ -187,4 +188,19 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 @media (max-width: 600px) {
   .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
   .modal-media, .modal-media video, .modal-media img { max-height: 55vh; }
+
+  /* nav collapses into a hamburger (CSS-only toggle — no JS) */
+  .topnav { padding: 12px 16px; }
+  .nav-burger { display: block; margin-left: auto; color: #eee; font-size: 1.6rem; line-height: 1;
+    cursor: pointer; padding: 2px 8px; user-select: none; }
+  .nav-links { display: none; width: 100%; order: 3; flex-direction: column; gap: 2px; margin-left: 0; }
+  .nav-toggle:checked ~ .nav-links { display: flex; }
+  .nav-links a { padding: 12px; font-size: .95rem; border-radius: 8px; }
+
+  /* filters stack full-width, one per row (matches the live site) */
+  .filters { flex-direction: column; align-items: stretch; gap: 8px; margin-top: 14px; }
+  .filters input[type=text], .filters select, .filters button, .filters label { flex: none; width: 100%; }
+  .filters label { justify-content: flex-start; }
+  .filters label input[type=date] { flex: 1 1 auto; width: auto; }
+  .filters button { padding: 11px; }
 }
