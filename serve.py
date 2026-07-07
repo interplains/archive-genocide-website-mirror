@@ -40,6 +40,13 @@ PORT  = int(os.environ.get('PORT', '8000'))
 DATA_FILES = {'gallery_high.json', 'gallery_rest.json', 'gallery_meta.json',
               'decisions.json', 'victims.json'}
 
+# Bundled release artifacts that live at the repo root (not in web/ or the media dir).
+# Served so the download page's ".torrent file" button and the magnet/checksum links work
+# from the mirror itself. Any that a user fetches for verification (key.asc, SHA256SUMS*)
+# are served too, if present.
+ROOT_FILES = {'archivegenocide-media.torrent', 'MAGNET.txt',
+              'key.asc', 'SHA256SUMS', 'SHA256SUMS.asc'}
+
 
 def safe_join(base, rel):
     """Join base + rel, guaranteeing the result stays inside base (blocks ../ escape)."""
@@ -92,6 +99,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if '/' not in p and (p in DATA_FILES or p == 'index.json'
                              or (p.startswith('gallery_') and p.endswith('.json'))):
             j = safe_join(DATA, p)
+            if j and os.path.isfile(j):
+                return j
+        # bundled release artifacts at the repo root (.torrent, MAGNET.txt, signing files)
+        if '/' not in p and p in ROOT_FILES:
+            j = safe_join(ROOT, p)
             if j and os.path.isfile(j):
                 return j
         web = safe_join(WEB, p)
