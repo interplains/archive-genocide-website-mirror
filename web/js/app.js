@@ -119,9 +119,14 @@ async function loadFromManifest(m) {
   const rest = (m.rest && m.rest.length) ? m.rest : (m.chunks || []).filter(c => c !== primary);
   if (primary) mergeEntries(await fetch(primary).then(r => r.json()));
   firstPaint();
-  Promise.all(rest.map(url =>
-    fetch(url).then(r => r.ok ? r.json() : []).then(a => { if (Array.isArray(a) && a.length) mergeEntries(a); }).catch(() => {})
-  )).then(() => { restLoaded = true; fillArchives(); applyFilters(); tryOpenPending(); });
+  // Fetch the rest in parallel, but MERGE IN MANIFEST ORDER — mergeEntries only appends and nothing
+  // re-sorts, so merging in completion order would scramble the pre-sorted gallery. Promise.all keeps
+  // results aligned to `rest` (which serve.py lists in sorted chunk order), preserving the order.
+  Promise.all(rest.map(url => fetch(url).then(r => r.ok ? r.json() : []).catch(() => [])))
+    .then(results => {
+      results.forEach(a => { if (Array.isArray(a) && a.length) mergeEntries(a); });
+      restLoaded = true; fillArchives(); applyFilters(); tryOpenPending();
+    });
 }
 
 // Backward-compatible path for a mirror with no index.json (just the two legacy files).

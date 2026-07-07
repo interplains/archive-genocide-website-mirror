@@ -73,9 +73,55 @@ def _list_chunks():
     return chunks
 
 
+GALLERY_FIRST_CHUNK = 500    # tiny primary chunk -> near-instant first paint (~10 pages of buffer)
+GALLERY_CHUNK_SIZE  = 2000   # larger background chunks -> few files, fetched after first paint
+
+
+def ensure_chunks():
+    """Split a monolithic data/gallery_high.json into small gallery_high_NNNN.json files so the viewer
+    paints the first cards after ~one small chunk instead of downloading the whole ~40 MB file. Order is
+    preserved (chunks are contiguous slices of the already-sorted list). Idempotent + safe: it only acts
+    when the monolith is present, clears stale chunks first (so a fresh get-data re-chunks cleanly), writes
+    every chunk before removing the monolith, and leaves the monolith in place on any error so a retry can
+    recover. If the monolith is absent, the data is already chunked and this does nothing."""
+    src = os.path.join(DATA, 'gallery_high.json')
+    if not os.path.isfile(src):
+        return
+    try:
+        with open(src, encoding='utf-8') as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return                                      # unreadable -> leave it; app.js legacy path still works
+    if not isinstance(data, list) or not data:
+        return
+    for fn in os.listdir(DATA):                     # remove stale chunks from a previous data version
+        if fn.startswith('gallery_high_') and fn.endswith('.json'):
+            try: os.remove(os.path.join(DATA, fn))
+            except OSError: pass
+    # a small first chunk (instant paint) then larger background chunks; contiguous slices keep order
+    slices = [(0, min(GALLERY_FIRST_CHUNK, len(data)))]
+    p = slices[0][1]
+    while p < len(data):
+        slices.append((p, min(p + GALLERY_CHUNK_SIZE, len(data))))
+        p += GALLERY_CHUNK_SIZE
+    written = 0
+    try:
+        for idx, (a, b) in enumerate(slices):
+            part = os.path.join(DATA, 'gallery_high_%04d.json' % idx)
+            with open(part, 'w', encoding='utf-8') as f:
+                json.dump(data[a:b], f, ensure_ascii=False, separators=(',', ':'))
+            written += 1
+    except OSError:
+        return                                      # partial write -> keep the monolith so a retry re-chunks
+    if written:
+        try: os.remove(src)                         # replaced by chunks, and only after all wrote OK
+        except OSError: pass
+
+
 def build_index():
     """Auto-discover gallery chunks and write data/index.json (the viewer's manifest). Adding a volume =
     drop its media + gallery chunk, then restart -- this finds it. The operator never hand-edits a manifest."""
+    ensure_chunks()                                 # split a monolithic gallery_high.json for fast first paint
     chunks = _list_chunks()
     primary = 'gallery_high.json' if 'gallery_high.json' in chunks else (chunks[0] if chunks else None)
     manifest = {'primary': primary, 'rest': [c for c in chunks if c != primary], 'chunks': chunks,
