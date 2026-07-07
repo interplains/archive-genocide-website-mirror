@@ -8,6 +8,9 @@ This repo is the **viewer** (a tiny server + front-end). The **footage and galle
 are distributed separately as a signed torrent (they're huge and travel peer-to-peer, so
 anyone can re-seed them).
 
+> 🐛 **Something broken or not working right?** Please report it on **[Telegram](https://t.me/+Fo6vcMwk3xkwYzRk)** —
+> bugs, rough edges, install snags, anything — so we can fix it fast.
+
 > 📄 Prefer plain text? Everything below is also in **[`README.txt`](README.txt)**.
 
 ---
@@ -108,6 +111,26 @@ Anyone can copy this, so a bad actor could publish a **tampered** copy. Protect 
   verified channel.
 - The **official domains, public key, and release hashes** are the source of truth. A mirror
   can re-host the data; it cannot *be* the official source.
+
+---
+
+## If "Share online" (the Cloudflare tunnel) won't set up
+Common snags and fixes:
+
+- **"cloudflared not found":** install the small free tool, then run `share-online` again —
+  Windows: `winget install --id Cloudflare.cloudflared` · macOS: `brew install cloudflared` ·
+  Linux: [pkg.cloudflare.com](https://pkg.cloudflare.com/).
+- **No link ever appears, or it just hangs:** some locked-down or shared hosts (managed
+  seedboxes, certain VPS containers) block or kill the tunnel. Run it from a normal computer,
+  or set up a proper VPS — see **[`HOSTING.md`](HOSTING.md)**.
+- **The link opens but shows `502` / "origin unreachable":** start the mirror **first** and
+  confirm `http://localhost:8000` works in your browser, *then* run `share-online`. If you're
+  running cloudflared by hand, point it at **`http://127.0.0.1:8000`**, not `localhost` — on
+  some systems `localhost` resolves to IPv6 and can't reach the server.
+- **Link works but is slow, or thumbnails load in bursts:** normal — your own computer and home
+  upload speed serve everyone. For a fast, always-on mirror, host it on a VPS (**[`HOSTING.md`](HOSTING.md)**).
+- **You just want to help, not host:** you don't need the tunnel at all — keep the torrent
+  **seeding** in your torrent app; that alone re-shares the footage.
 
 ---
 

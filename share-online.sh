@@ -48,4 +48,4 @@ echo
 echo "  Keep this window OPEN while people use the link. Close it to stop sharing."
 echo "  Your home IP address stays hidden (traffic goes through Cloudflare)."
 echo "------------------------------------------------------------"
-cloudflared tunnel --url http://localhost:8000
+cloudflared tunnel --url http://127.0.0.1:8000

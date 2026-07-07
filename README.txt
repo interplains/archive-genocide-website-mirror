@@ -5,6 +5,9 @@ This is a read-only copy of the archive that you can run on your own computer.
 The point: make the documentation impossible to erase. Anyone can host a copy, so
 no single takedown, host, or country can remove the evidence.
 
+>> Found a bug or something not working right? Please report it on Telegram:
+   https://t.me/+Fo6vcMwk3xkwYzRk   -- so we can fix it fast.
+
 You need three things together in this folder:
    1) this code            (you already have it)
    2) the DATA files    ->  run  get-data  (below) to fetch them into  data\
@@ -116,5 +119,26 @@ Two rules that keep you and sources safe:
 
 This viewer is read-only: no admin, no login, no uploads, no tracking, and it makes no
 connection to the internet. Everything is served from your own computer.
+
+--------------------------------------------------------------------
+IF "SHARE ONLINE" (THE CLOUDFLARE TUNNEL) WON'T SET UP
+--------------------------------------------------------------------
+  * "cloudflared not found": install the small free tool, then run
+    share-online again.
+      Windows:  winget install --id Cloudflare.cloudflared
+      macOS:    brew install cloudflared
+      Linux:    https://pkg.cloudflare.com/
+  * No link appears / it hangs: some locked-down or shared hosts
+    (managed seedboxes, certain VPS containers) block or kill the tunnel.
+    Run it from a normal computer, or use a VPS - see HOSTING.md.
+  * Link shows 502 / "origin unreachable": start the mirror FIRST and
+    confirm http://localhost:8000 works, THEN run share-online. If you run
+    cloudflared by hand, point it at http://127.0.0.1:8000 (not localhost -
+    on some systems localhost resolves to IPv6 and can't reach the server).
+  * Link works but slow / thumbnails in bursts: normal - your own PC and
+    home upload serve everyone. For an always-on mirror, use a VPS.
+  * Just want to help, not host? You don't need the tunnel - keep the
+    torrent SEEDING in your torrent app; that re-shares the footage.
+
 
 License: MIT (see LICENSE).
