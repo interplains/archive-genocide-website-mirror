@@ -25,7 +25,7 @@ fi
 # 2. make sure the mirror is running on localhost:8000; start it in the background if not
 mirror_up() { (exec 3<>/dev/tcp/127.0.0.1/8000) 2>/dev/null; }
 if ! mirror_up; then
-  PY=""; for c in python3 python; do command -v "$c" >/dev/null 2>&1 && { PY="$c"; break; }; done
+  PY=""; for c in python3 python py; do command -v "$c" >/dev/null 2>&1 && "$c" -c 'import sys' >/dev/null 2>&1 && { PY="$c"; break; }; done
   if [ -z "$PY" ]; then
     echo "The mirror isn't running, and Python 3 wasn't found to start it."
     echo "Run  bash start-mirror.sh  first, then run this again."

@@ -10,7 +10,7 @@ echo.
 
 REM --- 1. Python 3 required ---
 set "PY="
-for %%P in (python py python3) do ( if not defined PY ( where %%P >nul 2>&1 && set "PY=%%P" ) )
+for %%P in (py python python3) do ( if not defined PY ( %%P -c "import sys" >nul 2>&1 && set "PY=%%P" ) )
 if not defined PY (
   echo  Python 3 is required and was not found on this computer.
   echo  Install it from  https://www.python.org/downloads/

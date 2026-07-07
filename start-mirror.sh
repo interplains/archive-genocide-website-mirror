@@ -10,7 +10,7 @@ echo
 
 # 1. Python 3
 PY=""
-for c in python3 python; do command -v "$c" >/dev/null 2>&1 && { PY="$c"; break; }; done
+for c in python3 python py; do command -v "$c" >/dev/null 2>&1 && "$c" -c 'import sys' >/dev/null 2>&1 && { PY="$c"; break; }; done
 if [ -z "$PY" ]; then
   echo "Python 3 is required and was not found."
   echo "Install it from https://www.python.org/downloads/ then run this again."

@@ -29,7 +29,7 @@ set "RUNNING="
 netstat -an | find ":8000" | find "LISTENING" >nul 2>&1 && set "RUNNING=1"
 if not defined RUNNING (
   set "PY="
-  for %%P in (python py python3) do ( if not defined PY ( where %%P >nul 2>&1 && set "PY=%%P" ) )
+  for %%P in (py python python3) do ( if not defined PY ( %%P -c "import sys" >nul 2>&1 && set "PY=%%P" ) )
   if not defined PY (
     echo  The mirror isn't running, and Python 3 wasn't found to start it.
     echo  Double-click "Start Mirror.cmd" first, then run this again.
