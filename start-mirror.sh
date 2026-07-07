@@ -17,8 +17,8 @@ if [ -z "$PY" ]; then
   read -r -p "Press Enter to close. " _ ; exit 1
 fi
 
-# 2. gallery data present?
-if [ ! -f "data/gallery_high.json" ]; then
+# 2. gallery data present? (monolith on first run, or the gallery_high_0000.json chunks serve.py leaves after)
+if [ ! -f "data/gallery_high.json" ] && [ ! -f "data/gallery_high_0000.json" ]; then
   echo "The gallery data is not here yet (data/gallery_high.json)."
   echo "Run  bash get-data.sh  first to download it (~95 MB), then run this again."
   read -r -p "Press Enter to close. " _ ; exit 1

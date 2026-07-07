@@ -19,8 +19,8 @@ if not defined PY (
   pause & exit /b 1
 )
 
-REM --- 2. gallery data present? ---
-if not exist "data\gallery_high.json" (
+REM --- 2. gallery data present? (monolith on first run, or the gallery_high_0000.json chunks serve.py leaves after) ---
+if not exist "data\gallery_high.json" if not exist "data\gallery_high_0000.json" (
   echo  The gallery data is not here yet ^(data\gallery_high.json^).
   echo  Run  get-data.cmd  first to download it ^(~95 MB^), then run this again.
   echo.
