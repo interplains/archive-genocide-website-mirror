@@ -118,10 +118,64 @@ def ensure_chunks():
         except OSError: pass
 
 
+VICTIMS_FIRST_CHUNK = 2000    # first victims page(s) -> fast first paint
+VICTIMS_CHUNK_SIZE  = 10000   # larger background chunks
+
+
+def _victim_age(p):
+    try:
+        return float(str(p.get('age')).strip())
+    except (TypeError, ValueError, AttributeError):
+        return float('inf')                         # unknown age sorts last (matches the old client sort)
+
+
+def ensure_victims_chunks():
+    """Sort victims.json youngest-first and split it into victims_NNNN.json + a victims_index.json manifest,
+    so the victims page paints its first page after one small chunk instead of the whole ~10 MB file. Same
+    idempotent + safe rules as ensure_chunks (acts only on the monolith, clears stale chunks, writes every
+    chunk before removing the source)."""
+    src = os.path.join(DATA, 'victims.json')
+    if not os.path.isfile(src):
+        return
+    try:
+        with open(src, encoding='utf-8') as f:
+            raw = json.load(f)
+    except (OSError, ValueError):
+        return
+    data = raw if isinstance(raw, list) else (raw.get('data') if isinstance(raw, dict) else None)
+    if not isinstance(data, list) or not data:
+        return
+    data = sorted(data, key=_victim_age)            # youngest first (matches the removed client-side sort)
+    for fn in os.listdir(DATA):
+        if fn.startswith('victims_') and fn.endswith('.json'):
+            try: os.remove(os.path.join(DATA, fn))
+            except OSError: pass
+    slices = [(0, min(VICTIMS_FIRST_CHUNK, len(data)))]
+    p = slices[0][1]
+    while p < len(data):
+        slices.append((p, min(p + VICTIMS_CHUNK_SIZE, len(data))))
+        p += VICTIMS_CHUNK_SIZE
+    names = []
+    try:
+        for idx, (a, b) in enumerate(slices):
+            nm = 'victims_%04d.json' % idx
+            with open(os.path.join(DATA, nm), 'w', encoding='utf-8') as f:
+                json.dump(data[a:b], f, ensure_ascii=False, separators=(',', ':'))
+            names.append(nm)
+        with open(os.path.join(DATA, 'victims_index.json'), 'w', encoding='utf-8') as f:
+            json.dump({'primary': names[0], 'rest': names[1:], 'total': len(data)}, f)
+    except OSError:
+        return                                      # partial write -> keep victims.json so a retry re-chunks
+    if names:
+        try: os.remove(src)
+        except OSError: pass
+
+
 def build_index():
     """Auto-discover gallery chunks and write data/index.json (the viewer's manifest). Adding a volume =
     drop its media + gallery chunk, then restart -- this finds it. The operator never hand-edits a manifest."""
     ensure_chunks()                                 # split a monolithic gallery_high.json for fast first paint
+    ensure_victims_chunks()                         # and the victims list the same way
     chunks = _list_chunks()
     primary = 'gallery_high.json' if 'gallery_high.json' in chunks else (chunks[0] if chunks else None)
     manifest = {'primary': primary, 'rest': [c for c in chunks if c != primary], 'chunks': chunks,
@@ -143,7 +197,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return os.path.join(WEB, 'index.html')
         # data files: the fixed set + the generated manifest + any gallery_*.json chunk
         if '/' not in p and (p in DATA_FILES or p == 'index.json'
-                             or (p.startswith('gallery_') and p.endswith('.json'))):
+                             or (p.startswith('gallery_') and p.endswith('.json'))
+                             or (p.startswith('victims_') and p.endswith('.json'))):
             j = safe_join(DATA, p)
             if j and os.path.isfile(j):
                 return j
