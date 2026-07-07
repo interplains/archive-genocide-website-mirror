@@ -21,8 +21,18 @@ FPR_NOSPACE="C24EC92B12D6670A2516065F9B4D575499AFA53C"
 need() { command -v "$1" >/dev/null 2>&1 || { echo "missing required tool: $1"; exit 2; }; }
 need gpg; need sha256sum
 
+# Fetch the official signing files if they aren't already here (same trusted sources as get-data).
+# This is only a convenience — the fingerprint check below is the real trust anchor: a wrong or
+# forged key.asc is rejected no matter where it came from.
+SOURCES="https://archivegenocide.com https://archivegenocide.org https://archivegenocide.is"
 for f in key.asc SHA256SUMS SHA256SUMS.asc; do
-  [ -f "$f" ] || { echo "not found: $f  (download it from the official releases page)"; exit 2; }
+  if [ ! -f "$f" ] && command -v curl >/dev/null 2>&1; then
+    for base in $SOURCES; do
+      curl -fsS -o "$f" "$base/$f" 2>/dev/null && break
+    done
+    [ -s "$f" ] || rm -f "$f"
+  fi
+  [ -f "$f" ] || { echo "could not obtain $f — are you online? (or download it from https://archivegenocide.com/$f)"; exit 2; }
 done
 
 echo "1) Checking the public key's fingerprint..."

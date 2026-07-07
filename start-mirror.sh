@@ -24,11 +24,14 @@ if [ ! -f "data/gallery_high.json" ]; then
   read -r -p "Press Enter to close. " _ ; exit 1
 fi
 
-# 2b. auto-verify the release signature if the tools + files are present
-if [ -f key.asc ] && [ -f SHA256SUMS ] && [ -f SHA256SUMS.asc ] && command -v gpg >/dev/null 2>&1; then
+# 2b. auto-verify the release signature (verify.sh fetches the official signing files if needed)
+if command -v gpg >/dev/null 2>&1 && command -v curl >/dev/null 2>&1; then
   echo "Verifying release signature..."
-  if sh verify.sh >/tmp/agverify.$$ 2>&1; then
+  sh verify.sh >/tmp/agverify.$$ 2>&1; vrc=$?
+  if [ "$vrc" -eq 0 ]; then
     echo "  release verified OK."
+  elif [ "$vrc" -eq 2 ]; then
+    echo "  (couldn't fetch the signing files - offline? skipping verification for now)"
   else
     echo "  ** VERIFICATION FAILED - this copy may be tampered with. **"
     sed 's/^/    /' /tmp/agverify.$$

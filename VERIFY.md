@@ -23,18 +23,24 @@ find *only* on some random mirror means nothing.
 - the **gallery data** (`gallery_high.json`, `gallery_rest.json`, `gallery_meta.json`) that this viewer reads
 
 ## Verify it (the easy way)
-From the folder holding `key.asc`, `SHA256SUMS`, `SHA256SUMS.asc`, and the release files:
+Just run it — the script **fetches the signing files** (`key.asc`, `SHA256SUMS`, `SHA256SUMS.asc`) from
+the official site automatically, then checks the bundled `archivegenocide-media.torrent` + `MAGNET.txt`:
 
 ```sh
 sh verify.sh
 ```
 It checks the key fingerprint, verifies the signature, then checks the file hashes. If any
-step fails, **stop** — the release is fake or tampered.
+step fails, **stop** — the release is fake or tampered. (The launcher runs this for you on start.)
 
 ## Verify it (manually, no script)
 Requires `gpg` (GnuPG) and `sha256sum` — standard on Linux/macOS.
 
 ```sh
+# 0. get the signing files from the official site (skip if you already have them)
+curl -O https://archivegenocide.com/key.asc
+curl -O https://archivegenocide.com/SHA256SUMS
+curl -O https://archivegenocide.com/SHA256SUMS.asc
+
 # 1. import the key and confirm its fingerprint matches the one above
 gpg --import key.asc
 gpg --show-keys key.asc          # fingerprint must equal C24E C92B … 99AF A53C

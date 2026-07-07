@@ -27,13 +27,15 @@ if not exist "data\gallery_high.json" (
   pause & exit /b 1
 )
 
-REM --- 2b. auto-verify the release signature if the tools + files are present ---
+REM --- 2b. auto-verify the release signature (verify.sh fetches the signing files if needed) ---
 set "CANVERIFY="
 where sh >nul 2>&1 && where gpg >nul 2>&1 && set "CANVERIFY=1"
-if defined CANVERIFY if exist key.asc if exist SHA256SUMS if exist SHA256SUMS.asc (
+if defined CANVERIFY (
   echo  Verifying release signature...
   call sh verify.sh
-  if errorlevel 1 (
+  if errorlevel 2 (
+    echo   ^(couldn't fetch the signing files - offline? skipping verification for now^)
+  ) else if errorlevel 1 (
     echo.
     echo  ** VERIFICATION FAILED - this copy may be tampered with. **
     set /p "GOON=  Continue anyway? [y/N]: "
