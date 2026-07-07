@@ -41,8 +41,10 @@ if command -v gpg >/dev/null 2>&1 && command -v curl >/dev/null 2>&1; then
   echo
 fi
 
-# 3. find the footage, or ask
-if [ -d "archivegenocide-media" ]; then
+# 3. find the footage: honor a caller-set MEDIA_DIR, else auto-detect, else ask
+if [ -n "$MEDIA_DIR" ]; then
+  export MEDIA_DIR                                    # e.g. MEDIA_DIR=/path/to/archivegenocide-media ./start-mirror.sh
+elif [ -d "archivegenocide-media" ]; then
   export MEDIA_DIR="$PWD/archivegenocide-media"
 else
   echo "Where is the archive's FOOTAGE folder?"

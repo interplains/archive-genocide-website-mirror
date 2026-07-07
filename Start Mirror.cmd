@@ -46,9 +46,8 @@ if defined CANVERIFY (
   echo.
 )
 
-REM --- 3. find the footage, or ask ---
-set "MEDIA_DIR="
-if exist "archivegenocide-media\" set "MEDIA_DIR=%cd%\archivegenocide-media"
+REM --- 3. find the footage: honor a caller-set MEDIA_DIR, else auto-detect, else ask ---
+if not defined MEDIA_DIR if exist "archivegenocide-media\" set "MEDIA_DIR=%cd%\archivegenocide-media"
 if not defined MEDIA_DIR (
   echo  Where is the archive's FOOTAGE folder?
   echo  ^(the "archivegenocide-media" folder you downloaded from the torrent^)
