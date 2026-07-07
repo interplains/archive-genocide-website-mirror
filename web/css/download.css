@@ -62,6 +62,14 @@
       font-size: .82rem; color: var(--text-muted); line-height: 1.6;
     }
     .note strong { color: var(--text); }
+    /* Tor onion mirror */
+    .onion-head { margin-top: 56px; }
+    .onion-addr {
+      font-family: 'JetBrains Mono', monospace; font-size: .82rem; line-height: 1.6;
+      color: var(--text); background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px; margin: 6px 0 22px;
+      word-break: break-all; user-select: all;
+    }
     /* signed-torrents section */
     .sec-rule{display:flex;align-items:center;gap:16px;margin:48px 0 24px;}
     .sec-rule h2{font-size:1.3rem;font-weight:700;white-space:nowrap;color:var(--text);}
