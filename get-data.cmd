@@ -27,7 +27,7 @@ exit /b 0
 :fetch
 echo downloading %~1 ...
 for %%b in (%SOURCES%) do (
-  curl -fL --retry 2 --connect-timeout 15 -o "data\%~1" "%%b/%~1"
+  curl -fL --retry 2 --connect-timeout 15 --remove-on-error -o "data\%~1" "%%b/%~1"
   if not errorlevel 1 goto :eof
   echo    ...%%b failed, trying next mirror
 )

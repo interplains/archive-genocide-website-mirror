@@ -223,15 +223,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_error(404)
         return None
 
+    def send_response_only(self, code, message=None):
+        self._status = code                 # remembered so end_headers only caches successful responses
+        return super().send_response_only(code, message)
+
     def end_headers(self):
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
         # Cache the heavy, stable things (gallery/victims data + media + icons) so leaving a page and
         # coming back doesn't re-download them -- this is a multi-page app, so each visit re-fetches.
-        # Code (js/css/html) is deliberately NOT cached here, so updates are never masked.
+        # Code (js/css/html) is deliberately NOT cached here, so updates are never masked. Only cache
+        # 2xx responses: caching a 404 (e.g. a thumbnail requested while the torrent is still
+        # downloading) would leave it "broken" in the browser for an hour after the file arrives.
         p = self.path.split('?', 1)[0].split('#', 1)[0].lower()
-        if p.endswith(('.json', '.jpg', '.jpeg', '.png', '.webp', '.gif',
-                       '.mp4', '.webm', '.mov', '.m4v', '.ico', '.woff2')):
+        if 200 <= getattr(self, '_status', 200) < 300 and p.endswith(
+                ('.json', '.jpg', '.jpeg', '.png', '.webp', '.gif',
+                 '.mp4', '.webm', '.mov', '.m4v', '.ico', '.woff2')):
             self.send_header('Cache-Control', 'public, max-age=3600')
         super().end_headers()
 

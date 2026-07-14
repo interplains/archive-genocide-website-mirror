@@ -22,7 +22,7 @@ for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json; do
   echo "downloading $f ..."
   got=0
   for base in "${SOURCES[@]}"; do
-    if curl -fL --retry 2 --connect-timeout 15 -o "data/$f" "$base/$f"; then
+    if curl -fL --retry 2 --connect-timeout 15 --remove-on-error -o "data/$f" "$base/$f"; then
       got=1; break
     else
       echo "  ...$base failed, trying next mirror"
