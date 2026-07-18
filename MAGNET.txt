@@ -1,1 +1,8 @@
+# Archive Genocide — media torrents (magnet links). Both share one archivegenocide-media/ folder,
+# so a client downloading both merges them into a single archive with no duplicate files.
+
+# Volume 1 (864.5 GB, 82,386 media files) — the original release
 magnet:?xt=urn:btih:9d16c2f6f67e3b37afab3a1c82e67b1314053b6e&dn=archivegenocide-media&tr=udp%3A//tracker.opentrackr.org%3A1337/announce&tr=udp%3A//open.tracker.cc%3A1337/announce&tr=udp%3A//exodus.desync.com%3A6969/announce&tr=udp%3A//tracker.torrent.eu.org%3A451/announce&tr=udp%3A//open.demonii.com%3A1337/announce&tr=udp%3A//tracker.openbittorrent.com%3A6969/announce
+
+# Volume 2 (778 GB, 64,250 media files) — Oct-2023 backfill + Evidence Task rescue + recent additions
+magnet:?xt=urn:btih:23708b5122b1752933bb3255afd806630c8480ca&dn=archivegenocide-media&tr=udp%3A//tracker.opentrackr.org%3A1337/announce&tr=udp%3A//open.tracker.cc%3A1337/announce&tr=udp%3A//exodus.desync.com%3A6969/announce&tr=udp%3A//tracker.torrent.eu.org%3A451/announce&tr=udp%3A//open.demonii.com%3A1337/announce&tr=udp%3A//tracker.openbittorrent.com%3A6969/announce
