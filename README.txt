@@ -1,4 +1,4 @@
-﻿ARCHIVE GENOCIDE WEBSITE MIRROR  â€”  run your own copy
+﻿ARCHIVE GENOCIDE WEBSITE MIRROR  —  run your own copy
 ==================================================
 
 This is a read-only copy of the archive that you can run on your own computer.
@@ -30,7 +30,7 @@ GET THE DATA (do this once):
 
 
 --------------------------------------------------------------------
-EASIEST WAY  â€”  let Claude Code set it up for you
+EASIEST WAY  —  let Claude Code set it up for you
 --------------------------------------------------------------------
 If you have Claude Code (https://claude.ai/code), open it in this folder and say:
 
@@ -41,7 +41,7 @@ in your browser. You don't have to touch any code.
 
 
 --------------------------------------------------------------------
-NO CLAUDE?  â€”  just double-click
+NO CLAUDE?  —  just double-click
 --------------------------------------------------------------------
    Windows:      double-click   Start Mirror.cmd
    Mac / Linux:  run            start-mirror.sh    (or:  bash start-mirror.sh)
@@ -55,7 +55,7 @@ automatically and you won't even be asked.
 
 
 --------------------------------------------------------------------
-MANUAL (advanced)  â€”  needs Python 3
+MANUAL (advanced)  —  needs Python 3
 --------------------------------------------------------------------
 From this folder:
 
@@ -109,13 +109,13 @@ You never edit a config file. (Static host? run  python serve.py --reindex  then
 --------------------------------------------------------------------
 IS IT REAL / IS IT SAFE?
 --------------------------------------------------------------------
-Anyone can copy this, so VERIFY a download before trusting it â€” see VERIFY.md, or run:
+Anyone can copy this, so VERIFY a download before trusting it — see VERIFY.md, or run:
 
       sh verify.sh
 
 Two rules that keep you and sources safe:
    * NEVER upload footage to a mirror. This copy has no upload form on purpose.
-   * The cryptographic SIGNATURE is what proves a copy is genuine â€” not how it looks.
+   * The cryptographic SIGNATURE is what proves a copy is genuine — not how it looks.
 
 This viewer is read-only: no admin, no login, no uploads, no tracking, and it makes no
 connection to the internet. Everything is served from your own computer.
