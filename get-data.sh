@@ -8,6 +8,9 @@
 #     ./get-data.sh https://a-mirror-you-trust.example    # any source you trust
 #     torsocks ./get-data.sh                              # route the default fetch through Tor
 #     ./get-data.sh http://<onion-address>.onion          # from the Tor onion mirror (run via torsocks)
+# --compressed asks for gzip. Without it curl downloads the gallery UNCOMPRESSED: 146 MB instead
+# of 32 MB per person. Same files on disk either way -- curl decompresses -- so this is a pure
+# 4.5x saving on the download, on our bandwidth bill, and on how long a slow connection waits.
 cd "$(dirname "$0")" || exit 1
 
 if [ -n "$1" ]; then
@@ -22,7 +25,7 @@ for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json; do
   echo "downloading $f ..."
   got=0
   for base in "${SOURCES[@]}"; do
-    if curl -fL --retry 2 --connect-timeout 15 --remove-on-error -o "data/$f" "$base/$f"; then
+    if curl -fL --compressed --retry 2 --connect-timeout 15 --remove-on-error -o "data/$f" "$base/$f"; then
       got=1; break
     else
       echo "  ...$base failed, trying next mirror"

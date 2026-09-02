@@ -19,3 +19,6 @@ Thumbs.db
 *.swp
 __pycache__/
 *.pyc
+
+# local rollback snapshots (never commit)
+_rollback_mirror_*/

@@ -19,7 +19,7 @@ anyone can re-seed them).
 1. **this code** — you have it
 2. **the data files** → run **`get-data`** to fetch them into `data/` (once):
    - Windows: double-click `get-data.cmd` · Mac/Linux: `bash get-data.sh`
-   - grabs `gallery_high.json`, `gallery_rest.json`, `gallery_meta.json`, `victims.json` (~95 MB) from the
+   - grabs `gallery_high.json`, `gallery_rest.json`, `gallery_meta.json`, `victims.json` (~33 MB compressed) from the
      official mirrors — it tries **archivegenocide.com → .org → .is** in turn, so one being down or blocked
      doesn't stop you. This is the *only* step that touches the network; the server never does.
    - **Privacy / blocked networks:** fetch it your own way instead — `bash get-data.sh https://a-mirror-you-trust.example`,

@@ -77,14 +77,22 @@ GALLERY_FIRST_CHUNK = 500    # tiny primary chunk -> near-instant first paint (~
 GALLERY_CHUNK_SIZE  = 8000   # few, large background chunks -> minimal per-request latency over a slow link
 
 
-def ensure_chunks():
-    """Split a monolithic data/gallery_high.json into small gallery_high_NNNN.json files so the viewer
-    paints the first cards after ~one small chunk instead of downloading the whole ~40 MB file. Order is
-    preserved (chunks are contiguous slices of the already-sorted list). Idempotent + safe: it only acts
-    when the monolith is present, clears stale chunks first (so a fresh get-data re-chunks cleanly), writes
-    every chunk before removing the monolith, and leaves the monolith in place on any error so a retry can
-    recover. If the monolith is absent, the data is already chunked and this does nothing."""
-    src = os.path.join(DATA, 'gallery_high.json')
+def ensure_chunks(name='gallery_high.json', first=None):
+    """Split a monolithic gallery file into small gallery_*_NNNN.json files so the viewer paints the first
+    cards after ~one small chunk instead of downloading the whole thing. Order is preserved (chunks are
+    contiguous slices of the already-sorted list). Idempotent + safe: it only acts when the monolith is
+    present, clears stale chunks first (so a fresh get-data re-chunks cleanly), writes every chunk before
+    removing the monolith, and leaves the monolith in place on any error so a retry can recover. If the
+    monolith is absent, the data is already chunked and this does nothing.
+
+    Called for BOTH gallery files. That matters: upstream now ships gallery_high.json as a small 2,000-entry
+    first-paint slice and puts the other ~155,000 entries in gallery_rest.json, so gallery_rest is the real
+    monolith (~137 MB). Chunking only gallery_high would leave the viewer fetching and JSON-parsing 137 MB
+    in one go, which stalls or exhausts memory on a modest machine."""
+    src = os.path.join(DATA, name)
+    stem = name[:-5]                                # 'gallery_high' / 'gallery_rest'
+    if first is None:
+        first = GALLERY_FIRST_CHUNK if stem == 'gallery_high' else GALLERY_CHUNK_SIZE
     if not os.path.isfile(src):
         return
     try:
@@ -95,11 +103,11 @@ def ensure_chunks():
     if not isinstance(data, list) or not data:
         return
     for fn in os.listdir(DATA):                     # remove stale chunks from a previous data version
-        if fn.startswith('gallery_high_') and fn.endswith('.json'):
+        if fn.startswith(stem + '_') and fn.endswith('.json'):
             try: os.remove(os.path.join(DATA, fn))
             except OSError: pass
     # a small first chunk (instant paint) then larger background chunks; contiguous slices keep order
-    slices = [(0, min(GALLERY_FIRST_CHUNK, len(data)))]
+    slices = [(0, min(first, len(data)))]
     p = slices[0][1]
     while p < len(data):
         slices.append((p, min(p + GALLERY_CHUNK_SIZE, len(data))))
@@ -107,7 +115,7 @@ def ensure_chunks():
     written = 0
     try:
         for idx, (a, b) in enumerate(slices):
-            part = os.path.join(DATA, 'gallery_high_%04d.json' % idx)
+            part = os.path.join(DATA, '%s_%04d.json' % (stem, idx))
             with open(part, 'w', encoding='utf-8') as f:
                 json.dump(data[a:b], f, ensure_ascii=False, separators=(',', ':'))
             written += 1
@@ -178,7 +186,8 @@ def ensure_victims_chunks():
 def build_index():
     """Auto-discover gallery chunks and write data/index.json (the viewer's manifest). Adding a volume =
     drop its media + gallery chunk, then restart -- this finds it. The operator never hand-edits a manifest."""
-    ensure_chunks()                                 # split a monolithic gallery_high.json for fast first paint
+    ensure_chunks('gallery_high.json')              # small first-paint slices
+    ensure_chunks('gallery_rest.json')               # and the ~137 MB bulk file, or the viewer parses it whole
     ensure_victims_chunks()                         # and the victims list the same way
     chunks = _list_chunks()
     primary = 'gallery_high.json' if 'gallery_high.json' in chunks else (chunks[0] if chunks else None)

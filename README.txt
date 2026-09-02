@@ -16,7 +16,7 @@ You need three things together in this folder:
 GET THE DATA (do this once):
    Windows:      double-click   get-data.cmd
    Mac / Linux:  run            bash get-data.sh
-   It downloads the gallery + victims files (~95 MB) into  data\
+   It downloads the gallery + victims files (~33 MB compressed) into  data\
    (gallery_high.json, gallery_rest.json, gallery_meta.json, victims.json).
    It tries the official mirrors in order - archivegenocide.com, then .org,
    then .is - so one being down or blocked doesn't stop you. That's the only
