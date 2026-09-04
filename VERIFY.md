@@ -53,10 +53,21 @@ sha256sum -c SHA256SUMS
 ```
 
 ## How the media is trusted
-The signed `SHA256SUMS` pins **`archivegenocide-media.torrent`** (and `MAGNET.txt`). Once you
-have that verified torrent, **BitTorrent verifies every one of the 167,000+ media files
-piece-by-piece** against it as they download — so an altered file simply won't match, and the
-magnet itself is inside the signed set. That's the full chain of trust for the footage:
+The signed `SHA256SUMS` pins the release `.torrent` (and `MAGNET.txt`). Once you have that
+verified torrent, **BitTorrent verifies every file in it piece-by-piece** against it as it
+downloads -- so an altered file simply won't match, and the magnet itself is inside the
+signed set.
+
+**Files are not media items.** Volume 1 holds 167,114 files = 82,386 media items plus their
+thumbnails and per-clip provenance notes. Volume 2 holds 148,521 files = 64,250 media items.
+Quoting the file count as a media count overstates the collection by roughly double.
+
+**Release cutoffs.** Each volume is complete as of the day it was cut, not as of today. The
+live gallery keeps growing, so at any moment there is footage on the site that no published
+torrent contains yet; it goes out in a later volume. The torrents are verifiable snapshots,
+not a live mirror.
+
+That's the full chain of trust for the footage:
 
 > your trusted key → signed `SHA256SUMS` → authentic `.torrent` → BitTorrent-verified media.
 

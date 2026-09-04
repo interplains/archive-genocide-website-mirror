@@ -42,7 +42,30 @@ if defined CANVERIFY (
     if /I not "!GOON!"=="y" exit /b 1
   ) else (
     echo   release verified OK.
+) else (
+  REM No sh/gpg. That is the NORMAL state of a clean Windows box, and this used to skip
+  REM verification silently -- on the path we advertise as the easiest one. Fall back to
+  REM PowerShell, which ships with Windows, and check the hashes at minimum. Say plainly
+  REM what was and was not verified.
+  if exist "SHA256SUMS" (
+    echo  Verifying file hashes with PowerShell ^(gpg not found - signature NOT checked^)...
+    powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+      "$bad=0;$n=0; Get-Content SHA256SUMS | ForEach-Object { if($_ -match '^([0-9a-fA-F]{64})\s+\*?(.+)$'){ $h=$Matches[1];$f=$Matches[2].Trim(); if(Test-Path -LiteralPath $f){ $a=(Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash; if($a -ieq $h){$n++} else {Write-Host ('   MISMATCH: '+$f);$bad++} } else {Write-Host ('   MISSING:  '+$f);$bad++} } }; if($bad -gt 0){Write-Host ('   ** '+$bad+' file(s) failed **');exit 1}; if($n -eq 0){Write-Host '   ** manifest verified nothing **';exit 1}; Write-Host ('   '+$n+' file(s) match the published hashes.')"
+    if errorlevel 1 (
+      echo.
+      echo  ** HASH VERIFICATION FAILED - this copy may be tampered with. **
+      set /p "GOON=  Continue anyway? [y/N]: "
+      if /I not "!GOON!"=="y" exit /b 1
+    )
+    echo   NOTE: hashes checked, but the GPG SIGNATURE was not.
+    echo   To verify the signature too, install Gpg4win ^(https://gpg4win.org^) and re-run.
+  ) else (
+    echo  ** NOT VERIFIED ** - no SHA256SUMS present and gpg/sh are unavailable,
+    echo  so this copy could not be checked against the project's signing key.
+    echo  See https://archivegenocide.com/verify.html for how to verify manually.
   )
+  echo.
+)
   echo.
 )
 

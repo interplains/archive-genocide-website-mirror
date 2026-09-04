@@ -37,6 +37,13 @@ def _media_dir():
 
 MEDIA = _media_dir()
 PORT  = int(os.environ.get('PORT', '8000'))
+# Bind to loopback by DEFAULT. This used to listen on 0.0.0.0 while printing
+# "http://localhost:8000" and describing itself as a local read-only viewer, so anyone running
+# a mirror on a shared network -- a cafe, a hotel, a newsroom -- was quietly serving the whole
+# archive to everyone on that network, and to anything that could reach the host. The people
+# this software is for are frequently the people who can least afford that.
+# Opt in explicitly to expose it:  BIND=0.0.0.0 python serve.py
+BIND  = os.environ.get('BIND', '127.0.0.1')
 DATA_FILES = {'gallery_high.json', 'gallery_rest.json', 'gallery_meta.json',
               'decisions.json', 'victims.json'}
 
@@ -53,7 +60,19 @@ def safe_join(base, rel):
     rel = urllib.parse.unquote(rel)
     norm = posixpath.normpath('/' + rel).lstrip('/')
     full = os.path.normpath(os.path.join(base, norm.replace('/', os.sep)))
-    if full == base or full.startswith(base + os.sep):
+    if not (full == base or full.startswith(base + os.sep)):
+        return None
+    # Text-level containment is not enough: a SYMLINK (or a Windows junction) inside the
+    # served tree can point anywhere on disk and would pass the check above while serving
+    # something else entirely. That is a live risk here -- the media directory arrives from
+    # a torrent, and this project itself uses junctions to assemble seed folders. Resolve
+    # both sides and re-check.
+    try:
+        rbase = os.path.realpath(base)
+        rfull = os.path.realpath(full)
+    except OSError:
+        return None
+    if rfull == rbase or rfull.startswith(rbase + os.sep):
         return full
     return None
 
@@ -203,7 +222,25 @@ def build_index():
     return manifest
 
 
+# Hosts this server will answer to. DNS rebinding works by resolving an attacker-controlled
+# name to 127.0.0.1 so a hostile page in the victim's browser can talk to a local service --
+# binding to loopback does NOT prevent it, only checking the Host header does. Extra names can
+# be allowed for legitimate LAN or tunnel use:  ALLOWED_HOSTS=mirror.lan,foo.trycloudflare.com
+_ALLOWED = {'localhost', '127.0.0.1', '::1', '[::1]', BIND}
+_ALLOWED |= {h.strip().lower() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()}
+_ALLOW_ANY_HOST = os.environ.get('ALLOWED_HOSTS', '').strip() == '*'
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
+    def _host_ok(self):
+        if _ALLOW_ANY_HOST:
+            return True
+        h = (self.headers.get('Host') or '').strip().lower()
+        if not h:
+            return True                       # HTTP/1.0 client, no Host to check
+        h = h.rsplit(':', 1)[0] if (':' in h and not h.endswith(']')) else h
+        return h.strip('[]') in {a.strip('[]') for a in _ALLOWED}
+
     def _resolve(self, path):
         p = path.split('?', 1)[0].split('#', 1)[0].lstrip('/')
         if p == '':
@@ -239,6 +276,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
+        # frame-ancestors is IGNORED when a CSP is delivered in a <meta> tag, so the meta
+        # policy in the pages cannot stop framing. It has to be an HTTP header.
+        self.send_header('Content-Security-Policy',
+                         "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+                         "img-src 'self' data:; media-src 'self'; connect-src 'self'; "
+                         "object-src 'none'; base-uri 'self'; form-action 'self'; "
+                         "frame-ancestors 'none'")
+        self.send_header('X-Frame-Options', 'DENY')
+        self.send_header('Permissions-Policy',
+                         'camera=(), microphone=(), geolocation=(), payment=(), usb=()')
+        self.send_header('Cross-Origin-Opener-Policy', 'same-origin')
+        self.send_header('Cross-Origin-Resource-Policy', 'same-origin')
         # Cache the heavy, stable things (gallery/victims data + media + icons) so leaving a page and
         # coming back doesn't re-download them -- this is a multi-page app, so each visit re-fetches.
         # Code (js/css/html) is deliberately NOT cached here, so updates are never masked. Only cache
@@ -262,6 +311,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return super().guess_type(path)
 
     def send_head(self):
+        # Enforced here because every GET and HEAD passes through send_head, so a rebinding
+        # attempt is refused before any path resolution or file access happens.
+        if not self._host_ok():
+            self.send_error(403, "Host not allowed")
+            return None
+
         # Range-aware (video seeking); the stdlib handler ignores Range and always sends 200.
         path = self.translate_path(self.path)
         if os.path.isdir(path):
@@ -335,7 +390,12 @@ if __name__ == '__main__':
     print(f"  gallery chunks: {nchunks}" + (f" (primary: {manifest['primary']})" if manifest.get('primary') else "  -- none found; put gallery data in data/"))
     print("  (drop a new volume's media + gallery chunk here, then restart, to add it)")
     print("  read-only viewer — no admin, no submissions, no tracking, no outbound calls")
+    if BIND in ('127.0.0.1', 'localhost', '::1'):
+        print("  bound to %s — this machine only. To share on your network: BIND=0.0.0.0 python serve.py" % BIND)
+    else:
+        print("  !! bound to %s — REACHABLE FROM YOUR NETWORK. Anyone who can reach this host can browse" % BIND)
+        print("     the archive. Only do this on a network you trust.")
     try:
-        http.server.ThreadingHTTPServer(('0.0.0.0', PORT), Handler).serve_forever()
+        http.server.ThreadingHTTPServer((BIND, PORT), Handler).serve_forever()
     except KeyboardInterrupt:
         print("\nstopped.")

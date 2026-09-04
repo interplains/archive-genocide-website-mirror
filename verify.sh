@@ -54,10 +54,24 @@ else
 fi
 
 echo "3) Checking your files against the signed hashes..."
-CHECK=$(sha256sum -c SHA256SUMS 2>&1 || true)
+# Keep sha256sum's EXIT STATUS -- do not swallow it with a `|| true`. Grepping the output
+# for "FAILED" alone is not enough: an empty or malformed SHA256SUMS makes sha256sum print
+# "no properly formatted SHA256 checksum lines found" and exit 1 WITHOUT the word FAILED,
+# so a truncated or emptied manifest used to sail through and print "Authentic" having
+# verified nothing at all.
+CHECK=$(sha256sum -c SHA256SUMS 2>&1); RC=$?
 printf '%s\n' "$CHECK" | sed 's/^/   /'
-if printf '%s' "$CHECK" | grep -q 'FAILED'; then
+if [ "$RC" -ne 0 ]; then
+  echo "   [FAIL] checksum verification did not pass (exit $RC). Do NOT trust this copy."
+  exit 1
+fi
+if printf '%s' "$CHECK" | grep -qE 'FAILED|WARNING'; then
   echo "   [FAIL] a file does NOT match its signed hash -- tampered. Do NOT trust it."
+  exit 1
+fi
+# Belt and braces: a manifest that verified zero files is not a pass.
+if ! printf '%s' "$CHECK" | grep -q ': OK'; then
+  echo "   [FAIL] SHA256SUMS verified no files -- empty or malformed. Do NOT trust it."
   exit 1
 fi
 
