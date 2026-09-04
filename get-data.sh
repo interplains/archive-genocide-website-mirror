@@ -46,7 +46,21 @@ if [ "$ok" = 1 ]; then
     break
   done
   if [ -s data/SHA256SUMS-data ]; then
+    # A fresh clone has no key.asc (it is fetched, not committed), which used to drop us to
+    # hashes-only on the very first run -- the run that matters most. Fetch it the same way
+    # verify.sh does. The hardcoded fingerprint below stays the trust anchor.
+    if [ ! -f key.asc ] && command -v gpg >/dev/null 2>&1; then
+      for base in "${SOURCES[@]}"; do
+        curl -fsL --retry 2 --connect-timeout 15 -o key.asc "$base/key.asc" && break
+      done
+      [ -s key.asc ] || rm -f key.asc
+    fi
     if command -v gpg >/dev/null 2>&1 && [ -f key.asc ] && [ -s data/SHA256SUMS-data.asc ]; then
+      FPR="C24EC92B12D6670A2516065F9B4D575499AFA53C"
+      if ! gpg --with-colons --import-options show-only --import key.asc 2>/dev/null | grep -q "$FPR"; then
+        echo "  WARNING: key.asc is NOT the archive's signing key -- refusing to trust it."
+        rm -f key.asc; ok=0
+      fi
       gpg --quiet --import key.asc 2>/dev/null || true
       if gpg --verify data/SHA256SUMS-data.asc data/SHA256SUMS-data 2>&1 | grep -q "Good signature"; then
         echo "  signature OK"
