@@ -42,6 +42,9 @@ if defined CANVERIFY (
     if /I not "!GOON!"=="y" exit /b 1
   ) else (
     echo   release verified OK.
+  )
+REM The closing paren above was MISSING, so the inner if's else block ran into the outer
+REM one and cmd.exe never treated the block below as the else of `if defined CANVERIFY`.
 ) else (
   REM No sh/gpg. That is the NORMAL state of a clean Windows box, and this used to skip
   REM verification silently -- on the path we advertise as the easiest one. Fall back to
