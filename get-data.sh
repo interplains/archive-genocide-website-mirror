@@ -20,12 +20,22 @@ else
 fi
 
 mkdir -p data
+# STAGE, VERIFY, THEN ACTIVATE.
+# These files used to be written straight into data/ and verified afterwards, so an interrupted
+# download destroyed the previous good copy, and a failed hash or signature left the rejected
+# download sitting in the directory the viewer reads next. serve.py would then chunk the rejected
+# JSON. Nothing touches data/ now until the whole set has been verified together, which also stops
+# one run assembling files from different releases across the three mirrors.
+STAGE="data/.new.$$"
+rm -rf "$STAGE"; mkdir -p "$STAGE" || exit 1
+trap 'rm -rf "$STAGE"' EXIT INT TERM
+
 ok=1
 for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json; do
   echo "downloading $f ..."
   got=0
   for base in "${SOURCES[@]}"; do
-    if curl -fL --compressed --retry 2 --connect-timeout 15 --remove-on-error -o "data/$f" "$base/$f"; then
+    if curl -fL --compressed --retry 2 --connect-timeout 15 --remove-on-error -o "$STAGE/$f" "$base/$f"; then
       got=1; break
     else
       echo "  ...$base failed, trying next mirror"
@@ -34,45 +44,41 @@ for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json; do
   [ "$got" = 1 ] || { echo "  FAILED: $f (all mirrors)"; ok=0; }
 done
 
-
 # Verify the metadata against the project's signed manifest. Without this you would have
 # BitTorrent-verified footage paired with completely unverified descriptions, dates,
 # classifications and source links -- the fields research actually depends on.
 if [ "$ok" = 1 ]; then
   echo "verifying the signed data manifest ..."
   for base in "${SOURCES[@]}"; do
-    curl -fsL --compressed --retry 2 --connect-timeout 15 -o data/SHA256SUMS-data "$base/SHA256SUMS-data" || continue
-    curl -fsL --retry 2 --connect-timeout 15 -o data/SHA256SUMS-data.asc "$base/SHA256SUMS-data.asc" || continue
+    curl -fsL --compressed --retry 2 --connect-timeout 15 -o "$STAGE/SHA256SUMS-data" "$base/SHA256SUMS-data" || continue
+    curl -fsL --retry 2 --connect-timeout 15 -o "$STAGE/SHA256SUMS-data.asc" "$base/SHA256SUMS-data.asc" || continue
     break
   done
-  if [ -s data/SHA256SUMS-data ]; then
+  if [ -s "$STAGE/SHA256SUMS-data" ]; then
     # A fresh clone has no key.asc (it is fetched, not committed), which used to drop us to
-    # hashes-only on the very first run -- the run that matters most. Fetch it the same way
-    # verify.sh does. The hardcoded fingerprint below stays the trust anchor.
+    # hashes-only on the very first run -- the run that matters most.
     if [ ! -f key.asc ] && command -v gpg >/dev/null 2>&1; then
       for base in "${SOURCES[@]}"; do
         curl -fsL --retry 2 --connect-timeout 15 -o key.asc "$base/key.asc" && break
       done
       [ -s key.asc ] || rm -f key.asc
     fi
-    if command -v gpg >/dev/null 2>&1 && [ -f key.asc ] && [ -s data/SHA256SUMS-data.asc ]; then
-      FPR="C24EC92B12D6670A2516065F9B4D575499AFA53C"
-      if ! gpg --with-colons --import-options show-only --import key.asc 2>/dev/null | grep -q "$FPR"; then
-        echo "  WARNING: key.asc is NOT the archive's signing key -- refusing to trust it."
-        rm -f key.asc; ok=0
-      fi
-      gpg --quiet --import key.asc 2>/dev/null || true
-      if gpg --verify data/SHA256SUMS-data.asc data/SHA256SUMS-data 2>&1 | grep -q "Good signature"; then
+    # Same bound-to-the-pinned-key check verify.sh uses -- see verify-sig.sh for why the old
+    # "grep for Good signature" version accepted an attacker's signature.
+    . "$(dirname "$0")/verify-sig.sh"
+    FPR="C24EC92B12D6670A2516065F9B4D575499AFA53C"
+    if command -v gpg >/dev/null 2>&1 && [ -f key.asc ] && [ -s "$STAGE/SHA256SUMS-data.asc" ]; then
+      if verify_signed "$STAGE/SHA256SUMS-data" "$STAGE/SHA256SUMS-data.asc" key.asc "$FPR"; then
         echo "  signature OK"
       else
-        echo "  WARNING: data manifest is NOT correctly signed -- do not trust this metadata."
+        echo "  WARNING: data manifest is NOT correctly signed by the archive's key."
         ok=0
       fi
     else
-      echo "  (gpg or key.asc unavailable -- checking hashes only, signature unverified)"
+      echo "  (gpg or key.asc unavailable -- checking hashes only, signature UNVERIFIED)"
     fi
     if [ "$ok" = 1 ]; then
-      CHK=$(cd data && sha256sum -c SHA256SUMS-data 2>&1); RC=$?
+      CHK=$(cd "$STAGE" && sha256sum -c SHA256SUMS-data 2>&1); RC=$?
       printf '%s\n' "$CHK" | sed 's/^/    /'
       if [ "$RC" -ne 0 ] || ! printf '%s' "$CHK" | grep -q ': OK'; then
         echo "  WARNING: downloaded metadata does NOT match the signed hashes."
@@ -82,6 +88,13 @@ if [ "$ok" = 1 ]; then
   else
     echo "  (no signed data manifest published yet -- metadata unverified)"
   fi
+fi
+
+if [ "$ok" = 1 ]; then
+  # Activate only now. Chunks generated from the OLD release are removed so a refresh can never
+  # serve old chunks alongside new metadata.
+  rm -f data/gallery_high_*.json data/gallery_rest_*.json data/index.json 2>/dev/null
+  for f in "$STAGE"/*; do mv -f "$f" data/ 2>/dev/null; done
 fi
 
 

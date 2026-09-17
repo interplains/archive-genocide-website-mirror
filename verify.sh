@@ -35,21 +35,18 @@ for f in key.asc SHA256SUMS SHA256SUMS.asc; do
   [ -f "$f" ] || { echo "could not obtain $f — are you online? (or download it from https://archivegenocide.com/$f)"; exit 2; }
 done
 
-echo "1) Checking the public key's fingerprint..."
-GOTFPR=$(gpg --with-colons --show-keys key.asc 2>/dev/null | awk -F: '/^fpr:/{print $10; exit}')
-if [ "$GOTFPR" != "$FPR_NOSPACE" ]; then
-  echo "   [FAIL] key.asc fingerprint is $GOTFPR"
-  echo "          expected                $FPR_NOSPACE  -- do NOT trust this copy."
-  exit 1
-fi
-echo "   [OK] fingerprint matches:  $FPR"
-gpg --quiet --import key.asc 2>/dev/null || true
+# ---- Verification, bound to the pinned key ------------------------------------------------
+# The logic lives in verify-sig.sh so this file and get-data.sh cannot drift apart. It exists
+# because this check used to accept a manifest signed by an ATTACKER -- see that file for the
+# reproduction and for why an isolated keyring, --status-fd and a primary-fingerprint check are
+# all three necessary.
+. "$(dirname "$0")/verify-sig.sh"
 
-echo "2) Verifying the SHA256SUMS signature..."
-if gpg --verify SHA256SUMS.asc SHA256SUMS 2>&1 | grep -q "Good signature"; then
-  echo "   [OK] SHA256SUMS is authentically signed by the project's key"
+echo "1) Checking the public key and the signature..."
+if verify_signed SHA256SUMS SHA256SUMS.asc key.asc "$FPR_NOSPACE"; then
+  echo "   [OK] SHA256SUMS is signed by the project's key ($FPR)"
 else
-  echo "   [FAIL] signature is INVALID -- this copy is fake or tampered. Do NOT trust it."
+  echo "   [FAIL] do NOT trust this copy."
   exit 1
 fi
 

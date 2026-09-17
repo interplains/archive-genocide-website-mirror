@@ -16,7 +16,7 @@ Quick start:
 Put the gallery JSON in ./data/ and the media folders in ./media/ (both come from
 the released torrent). Nothing here phones home or accepts input.
 """
-import http.server, os, posixpath, urllib.parse, json
+import http.server, io, os, posixpath, urllib.parse, json
 
 ROOT  = os.path.dirname(os.path.abspath(__file__))
 WEB   = os.path.join(ROOT, 'web')
@@ -316,6 +316,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if not self._host_ok():
             self.send_error(403, "Host not allowed")
             return None
+
+        # Identity endpoint. share-online used to decide "the mirror is already running" from a
+        # bare TCP connect to port 8000, so if any unrelated dev server or local dashboard held
+        # that port, Share Online published THAT to the internet instead of the archive. A
+        # listener can now be asked what it is, and the launcher refuses to tunnel anything that
+        # does not answer. Deliberately tiny: it reveals only "this is an archive mirror", which
+        # is what the tunnel is about to make public anyway.
+        if self.path.split('?')[0] == '/srv/identity':
+            body = json.dumps({'service': 'archive-genocide-mirror', 'version': 1}).encode()
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            return io.BytesIO(body)
 
         # Range-aware (video seeking); the stdlib handler ignores Range and always sends 200.
         path = self.translate_path(self.path)
