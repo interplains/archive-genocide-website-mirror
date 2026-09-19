@@ -23,7 +23,7 @@ if exist "%STAGE%" rmdir /s /q "%STAGE%"
 mkdir "%STAGE%"
 
 set "FAIL="
-for %%f in (gallery_high.json gallery_rest.json gallery_meta.json victims.json) do call :fetch %%f
+for %%f in (gallery_high.json gallery_rest.json gallery_meta.json victims.json decisions.json) do call :fetch %%f
 if defined FAIL goto :failed
 
 echo.

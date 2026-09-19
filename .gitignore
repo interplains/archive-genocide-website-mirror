@@ -22,3 +22,9 @@ __pycache__/
 
 # local rollback snapshots (never commit)
 _rollback_mirror_*/
+
+# Local safety copies taken before edits. Never distribute these: this is the PUBLIC mirror, and
+# a stale .bak of a verification script sitting beside the real one invites someone to run the
+# wrong file. Git history is the real backup.
+*.bak_*
+*.bak

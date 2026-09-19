@@ -31,7 +31,7 @@ rm -rf "$STAGE"; mkdir -p "$STAGE" || exit 1
 trap 'rm -rf "$STAGE"' EXIT INT TERM
 
 ok=1
-for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json; do
+for f in gallery_high.json gallery_rest.json gallery_meta.json victims.json decisions.json; do
   echo "downloading $f ..."
   got=0
   for base in "${SOURCES[@]}"; do
@@ -86,15 +86,48 @@ if [ "$ok" = 1 ]; then
       fi
     fi
   else
-    echo "  (no signed data manifest published yet -- metadata unverified)"
+    # FAIL CLOSED, same reason as verify-data.ps1: leaving ok=1 here meant a missing
+    # manifest activated the download and reported success, so "verified" covered data
+    # that nothing had checked.
+    echo "  [FAIL] no signed data manifest (SHA256SUMS-data) was published or downloaded."
+    echo "         The metadata has NOT been verified."
+    if [ "${ALLOW_UNVERIFIED:-}" = 1 ]; then
+      echo "         ALLOW_UNVERIFIED=1 set -- continuing anyway, at your own risk."
+    else
+      echo "         To use the data anyway, set ALLOW_UNVERIFIED=1 and re-run."
+      ok=0
+    fi
   fi
 fi
 
 if [ "$ok" = 1 ]; then
-  # Activate only now. Chunks generated from the OLD release are removed so a refresh can never
-  # serve old chunks alongside new metadata.
-  rm -f data/gallery_high_*.json data/gallery_rest_*.json data/index.json 2>/dev/null
-  for f in "$STAGE"/*; do mv -f "$f" data/ 2>/dev/null; done
+  # Activate by SWAPPING DIRECTORIES, not by moving files one at a time.
+  #
+  # The old sequence deleted the previous chunks and then moved each new file individually,
+  # so an interruption anywhere in that loop -- Ctrl-C, a full disk, a dropped session --
+  # left data/ holding part of the new release and part of the old, with nothing recording
+  # it. A mirror silently serving two releases at once is the exact failure this download
+  # exists to prevent.
+  #
+  # Two renames instead: the live directory steps aside, the fully verified staging directory
+  # takes its place, and only then is the old one discarded. An interruption now leaves
+  # either the old release or the new one, never a blend.
+  if ! mv -f data "data.old.$$" 2>/dev/null; then
+    echo "  [FAIL] could not move data/ aside; nothing was changed."; exit 1
+  fi
+  if ! mv -f "$STAGE" data 2>/dev/null; then
+    mv -f "data.old.$$" data 2>/dev/null
+    echo "  [FAIL] could not activate new data; previous release restored."; exit 1
+  fi
+  for f in "data.old.$$"/*; do
+    [ -e "$f" ] || continue
+    base=$(basename "$f")
+    case "$base" in
+      gallery_high_*.json|gallery_rest_*.json|index.json) continue ;;
+    esac
+    [ -e "data/$base" ] || mv -f "$f" data/ 2>/dev/null
+  done
+  rm -rf "data.old.$$" 2>/dev/null
 fi
 
 

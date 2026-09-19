@@ -121,8 +121,12 @@ def ensure_chunks(name='gallery_high.json', first=None):
         return                                      # unreadable -> leave it; app.js legacy path still works
     if not isinstance(data, list) or not data:
         return
-    for fn in os.listdir(DATA):                     # remove stale chunks from a previous data version
-        if fn.startswith(stem + '_') and fn.endswith('.json'):
+    # Remove stale chunks from a previous data version -- and the .tmp files an interrupted run
+    # leaves behind. The old pattern matched only '*.json', so a kill during the rename loop left
+    # orphaned '<stem>_NNNN.json.tmp' files that no later run ever matched; they are reclaimed only
+    # when a release happens to produce a chunk of the same number. Harmless but unbounded litter.
+    for fn in os.listdir(DATA):
+        if fn.startswith(stem + '_') and (fn.endswith('.json') or fn.endswith('.json.tmp')):
             try: os.remove(os.path.join(DATA, fn))
             except OSError: pass
     # a small first chunk (instant paint) then larger background chunks; contiguous slices keep order
@@ -131,15 +135,26 @@ def ensure_chunks(name='gallery_high.json', first=None):
     while p < len(data):
         slices.append((p, min(p + GALLERY_CHUNK_SIZE, len(data))))
         p += GALLERY_CHUNK_SIZE
-    written = 0
+    # Write to temp names, rename into place, and only let new chunks go live once EVERY
+    # slice exists. The old order wrote each chunk directly, so a disk-full or a kill
+    # mid-loop left some chunks written, some missing, and the monolith already gone -- a
+    # mirror serving a partial archive while looking like it loaded fine. os.replace is atomic.
+    written, tmps = 0, []
     try:
-        for idx, (a, b) in enumerate(slices):
+        for idx, (a, b_) in enumerate(slices):
             part = os.path.join(DATA, '%s_%04d.json' % (stem, idx))
-            with open(part, 'w', encoding='utf-8') as f:
-                json.dump(data[a:b], f, ensure_ascii=False, separators=(',', ':'))
+            tmp = part + '.tmp'
+            with open(tmp, 'w', encoding='utf-8') as f:
+                json.dump(data[a:b_], f, ensure_ascii=False, separators=(',', ':'))
+            tmps.append((tmp, part))
             written += 1
+        for tmp, part in tmps:
+            os.replace(tmp, part)
     except OSError:
-        return                                      # partial write -> keep the monolith so a retry re-chunks
+        for tmp, _ in tmps:
+            try: os.remove(tmp)
+            except OSError: pass
+        return                                      # partial write -> keep the monolith
     if written:
         try: os.remove(src)                         # replaced by chunks, and only after all wrote OK
         except OSError: pass

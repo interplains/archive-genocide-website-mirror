@@ -25,8 +25,20 @@ $manifest = Join-Path $Stage 'SHA256SUMS-data'
 $sig      = Join-Path $Stage 'SHA256SUMS-data.asc'
 
 if (-not (Test-Path $manifest)) {
-  Write-Host "  (no signed data manifest published yet - metadata UNVERIFIED)"
-  exit 0
+  # FAIL CLOSED. This used to print "UNVERIFIED" and exit 0, so get-data.cmd's errorlevel check
+  # passed and the downloader told the user the data was "ready and verified" -- for data nothing
+  # had verified. That is the same fail-open defect the September audit found in verify.sh, where
+  # a missing or empty manifest printed "Authentic" having checked nothing. A verifier that cannot
+  # verify must not return success; on an archive whose whole claim is that it can be checked,
+  # a false "verified" is worse than a loud failure.
+  Write-Host "  [FAIL] no signed data manifest (SHA256SUMS-data) was published or downloaded."
+  Write-Host "         The metadata has NOT been verified."
+  if ($env:ALLOW_UNVERIFIED -eq '1') {
+    Write-Host "         ALLOW_UNVERIFIED=1 set - continuing anyway, at your own risk."
+    exit 0
+  }
+  Write-Host "         To use the data anyway, set ALLOW_UNVERIFIED=1 and re-run."
+  exit 1
 }
 
 # ---- signature, when gpg is available ----------------------------------------------------

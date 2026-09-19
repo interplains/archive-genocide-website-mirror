@@ -49,7 +49,7 @@ if not defined ISOURS (
     echo.
     goto :nolink
   )
-  if exist "archivegenocide-media\" set "MEDIA_DIR=%cd%rchivegenocide-media"
+  if exist "archivegenocide-media\" set "MEDIA_DIR=%cd%\archivegenocide-media"
   echo  Starting the mirror in the background on port !PORT_USE!...
   start "Archive Genocide mirror (server)" /min cmd /c "set PORT=!PORT_USE!&& !PY! serve.py"
   REM wait until it answers as OURS, rather than sleeping and hoping
