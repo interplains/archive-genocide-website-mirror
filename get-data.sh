@@ -122,7 +122,7 @@ if [ "$ok" = 1 ]; then
     mv -f "data.old.$$" data 2>/dev/null
     echo "  [FAIL] could not activate new data; previous release restored."; exit 1
   fi
-  for f in "data.old.$$"/*; do
+  for f in "data.old.$$"/* "data.old.$$"/.[!.]*; do   # incl. dotfiles (.gitkeep)
     [ -e "$f" ] || continue
     base=$(basename "$f")
     case "$base" in
