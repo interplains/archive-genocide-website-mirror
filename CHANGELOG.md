@@ -2,6 +2,16 @@
 
 All notable changes to the Archive Genocide Website Mirror are recorded here.
 
+## v1.1.0 — 2026-10-01
+
+- **Volume 3** (144.1 GB, 58,730 media files, infohash `7515dd4dc4b16b3a2c35d8e1cc992d18e19c63df`): on the download
+  page, in `MAGNET.txt`, and bundled as `archivegenocide-media-volume3.torrent`. Same `archivegenocide-media` folder, so
+  it merges with Volumes 1 and 2. Checksum + signature: `https://archivegenocide.com/SHA256SUMS-torrent3` (+ `.asc`).
+- **Text posts view.** The archive now marks news graphics, quote/statistic cards and screenshots of text as
+  `text_card`. They appear only under the new "Text posts" view, never in "Verified" or "All footage".
+- **Fix:** the server now serves the bundled Volume 2 and Volume 3 `.torrent` files (the Volume 2 button returned 404).
+- Download page: "Website & Source Code" listed first; figures refreshed (205,215 entries).
+
 ## v1.0.0 — 2026-07-08
 
 First public release.

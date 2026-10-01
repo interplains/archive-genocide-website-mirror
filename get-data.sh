@@ -26,7 +26,10 @@ mkdir -p data
 # download sitting in the directory the viewer reads next. serve.py would then chunk the rejected
 # JSON. Nothing touches data/ now until the whole set has been verified together, which also stops
 # one run assembling files from different releases across the three mirrors.
-STAGE="data/.new.$$"
+# Stage BESIDE data/, never inside it: activation moves data/ aside first, and a stage inside
+# data/ would travel with it - the swap then cannot find the new release and every update fails
+# (the bug in the 2026-09-19 version: data could not refresh on Linux/macOS/Git Bash).
+STAGE=".data-new.$$"
 rm -rf "$STAGE"; mkdir -p "$STAGE" || exit 1
 trap 'rm -rf "$STAGE"' EXIT INT TERM
 

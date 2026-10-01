@@ -4,6 +4,8 @@
 !/data/.gitkeep
 !/media/.gitkeep
 !/data/victims.json
+/.data-new.*
+/data.old.*
 
 # Never commit signing SECRET keys or any credentials.
 *.key

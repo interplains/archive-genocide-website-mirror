@@ -203,6 +203,8 @@ function applyFilters(keepPage) {
   const from = document.getElementById('f-from').value, to = document.getElementById('f-to').value;
 
   filtered = allEntries.filter(e => {
+    // Text posts (news graphics, quote/statistic cards, screenshots of text) live only in their own view.
+    if (e.text_card ? conf !== 'textposts' : conf === 'textposts') return false;
     if (conf === 'high' && e.confidence !== 'high') return false;
     if (type && e.type !== type) return false;
     if (arch && e.source_archive !== arch) return false;

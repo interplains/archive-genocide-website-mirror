@@ -51,7 +51,8 @@ DATA_FILES = {'gallery_high.json', 'gallery_rest.json', 'gallery_meta.json',
 # Served so the download page's ".torrent file" button and the magnet/checksum links work
 # from the mirror itself. Any that a user fetches for verification (key.asc, SHA256SUMS*)
 # are served too, if present.
-ROOT_FILES = {'archivegenocide-media.torrent', 'MAGNET.txt',
+ROOT_FILES = {'archivegenocide-media.torrent', 'archivegenocide-media-torrent2.torrent',
+              'archivegenocide-media-volume3.torrent', 'MAGNET.txt',
               'key.asc', 'SHA256SUMS', 'SHA256SUMS.asc'}
 
 
