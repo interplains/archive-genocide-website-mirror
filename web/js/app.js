@@ -164,6 +164,12 @@ function firstPaint() {
   fillArchives();
   const _q = new URLSearchParams(location.search).get('q');
   if (_q) { const s = document.getElementById('f-search'); if (s) s.value = _q; }
+  // ?from=YYYY-MM-DD&to=YYYY-MM-DD — the Daily Reports page links each day to its footage this way
+  const _p = new URLSearchParams(location.search), _iso = /^\d{4}-\d{2}-\d{2}$/;
+  for (const [k, id] of [['from', 'f-from'], ['to', 'f-to']]) {
+    const v = _p.get(k), el = document.getElementById(id);
+    if (v && _iso.test(v) && el) el.value = v;
+  }
   applyFilters();
   tryOpenPending();
 }

@@ -19,7 +19,8 @@ disclosing publicly.
 ## Scope
 
 This repository is the **read-only viewer** (a small local server + front-end). By design it
-has no accounts, uploads, database, or outbound network calls. The reports that matter most:
+has no accounts, uploads, database, or outbound network calls (except the Geolocation page's three
+third-party maps, which load only when the reader clicks). The reports that matter most:
 
 - path traversal or file exposure in the server
 - cross-site scripting (XSS) in the viewer

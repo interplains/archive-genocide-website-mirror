@@ -297,6 +297,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Content-Security-Policy',
                          "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
                          "img-src 'self' data:; media-src 'self'; connect-src 'self'; "
+                         # geolocation.html only: three third-party maps, loaded when the reader
+                         # clicks (js/geolocation.js). Every other page's own meta CSP has no frame-src.
+                         "frame-src https://experience.arcgis.com https://destruction.trackaipac.com https://www.scribblemaps.com; "
                          "object-src 'none'; base-uri 'self'; form-action 'self'; "
                          "frame-ancestors 'none'")
         self.send_header('X-Frame-Options', 'DENY')

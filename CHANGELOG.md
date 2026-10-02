@@ -2,6 +2,15 @@
 
 All notable changes to the Archive Genocide Website Mirror are recorded here.
 
+## v1.2.0 — 2026-10-02
+
+- **Daily Reports page** (`reports.html`): the live site's 516 day-by-day reports, searchable, with each day linking to
+  its footage in the gallery (`index.html?from=…&to=…`, now read by the gallery).
+- **Geolocation page** (`geolocation.html`): the three maps shown on the main site — genocide.live's documented footage
+  map, the before/after satellite map from trackaipac (with their permission), and Abu Location's map. They are hosted
+  by those sites, so each loads only when you press its button; nothing is fetched from outside before that.
+- Both pages are in the menu of every page. Iris and the Node Map are not part of the mirror: they need the live server.
+
 ## v1.1.0 — 2026-10-01
 
 - **Volume 3** (144.1 GB, 58,730 media files, infohash `7515dd4dc4b16b3a2c35d8e1cc992d18e19c63df`): on the download

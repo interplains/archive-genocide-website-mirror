@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; frame-src https://experience.arcgis.com https://destruction.trackaipac.com https://www.scribblemaps.com; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="index, follow">
+  <title>Geolocation — Archive Genocide Website Mirror</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">Archive Genocide <span class="mirror-tag">mirror</span></a>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation menu">
+  <label for="nav-toggle" class="nav-burger" aria-hidden="true">☰</label>
+  <div class="nav-links">
+    <a href="index.html">Archive</a>
+    <a href="reports.html">Reports</a>
+    <a href="map.html">Map</a>
+    <a href="geolocation.html" class="active">Geolocation</a>
+    <a href="sources.html">Sources</a>
+    <a href="victims.html">Victims</a>
+    <a href="download.html">Download</a>
+    <a href="verify.html">Verify</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1>Geolocation — <span>maps</span> of Gaza</h1>
+  <p class="lead">Three maps made by other people, shown on the main site. This mirror makes no outside
+    connections on its own, so each one loads only when you press its button.</p>
+
+  <h2>Documented Footage Map</h2>
+  <p>An interactive map of geolocated genocide footage, maintained by TikTokGenocide. Source: <a href="https://genocide.live/map" target="_blank" rel="noopener noreferrer">genocide.live/map</a></p>
+  <div class="map-card geo-embed" data-src="https://experience.arcgis.com/experience/3fb13dd2fc4f478cbdf1f6bca39f191b" data-title="Documented Footage Map">
+    <p>This map is hosted by <b>experience.arcgis.com</b>. Nothing is loaded from there until you choose to — opening it connects your browser to that site.</p>
+    <button type="button" class="dl-btn primary geo-load">Load the map here</button>
+    <a class="dl-btn" href="https://experience.arcgis.com/experience/3fb13dd2fc4f478cbdf1f6bca39f191b" target="_blank" rel="noopener noreferrer">Open it in a new tab ↗</a>
+  </div>
+
+  <h2>Before/After Map — from trackaipac</h2>
+  <p>Satellite imagery of Gaza and the West Bank from before 7 October 2023 beside the current imagery, made by <strong>trackaipac</strong> and shown here with their permission. The map, its figures and its descriptions are theirs, not this archive’s. Source: <a href="https://destruction.trackaipac.com/" target="_blank" rel="noopener noreferrer">destruction.trackaipac.com</a></p>
+  <div class="map-card geo-embed" data-src="https://destruction.trackaipac.com/" data-title="Before/After Map — from trackaipac">
+    <p>This map is hosted by <b>destruction.trackaipac.com</b>. Nothing is loaded from there until you choose to — opening it connects your browser to that site.</p>
+    <button type="button" class="dl-btn primary geo-load">Load the map here</button>
+    <a class="dl-btn" href="https://destruction.trackaipac.com/" target="_blank" rel="noopener noreferrer">Open it in a new tab ↗</a>
+  </div>
+
+  <h2>Abu Location’s geolocation map</h2>
+  <p>Geolocation work by <strong>Abu Location</strong>, a researcher who has debunked numerous Israeli military claims during the Gaza genocide. His work is on <a href="https://x.com/AbuLocation" target="_blank" rel="noopener noreferrer">X</a>. Source: <a href="https://www.scribblemaps.com/maps/view/My-Map/RS3sBEB4ZU" target="_blank" rel="noopener noreferrer">scribblemaps.com</a></p>
+  <div class="map-card geo-embed" data-src="https://www.scribblemaps.com/maps/view/My-Map/RS3sBEB4ZU" data-title="Abu Location’s geolocation map">
+    <p>This map is hosted by <b>www.scribblemaps.com</b>. Nothing is loaded from there until you choose to — opening it connects your browser to that site.</p>
+    <button type="button" class="dl-btn primary geo-load">Load the map here</button>
+    <a class="dl-btn" href="https://www.scribblemaps.com/maps/view/My-Map/RS3sBEB4ZU" target="_blank" rel="noopener noreferrer">Open it in a new tab ↗</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p class="epigraph">“We suffer from an incurable malady, hope.”</p>
+  <p class="epigraph-attr">— Mahmoud Darwish</p>
+</footer>
+<script src="js/geolocation.js"></script>
+</body>
+</html>

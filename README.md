@@ -96,7 +96,8 @@ broken cards). Static host? run `python serve.py --reindex` to regenerate the ma
 - admin panel, login, or any write/edit capability
 - **submission or upload form** — this protects sources; no legitimate mirror will ever ask
   you to upload
-- tracking, analytics, cookies, or **any outbound network request**
+- tracking, analytics, cookies, or **any outbound network request** — the one exception is the Geolocation
+  page, where each of three third-party maps loads only when you press its button
 
 Everything is served from your own machine. It never phones home.
 

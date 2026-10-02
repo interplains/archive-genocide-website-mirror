@@ -1,0 +1,134 @@
+/* Daily Reports — self-contained documentary theme, scoped to .reports-page.
+     NOTE: this page deliberately does NOT load the gallery's css/style.css. That sheet
+     has generic bare-element selectors (e.g. `header{position:sticky;top:0}`) that would
+     leak onto this page's <header class="top"> and pin the masthead over the viewport on
+     mobile. nav.css is self-contained (hardcoded colors), so the nav still styles fine. */
+  html{font-size:16px}
+  body{margin:0; background:#100e0d; color:#ece7e0;
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  .reports-page{
+    --ground:#100e0d; --surface:#191614; --surface-2:#211d19;
+    --ink:#ece7e0; --muted:#a89f95; --faint:#6f665d;
+    --line:rgba(236,231,224,.09); --line-strong:rgba(236,231,224,.16);
+    --accent:#d24230; --accent-deep:#7c2117; --accent-soft:rgba(210,66,48,.14);
+    --dot-discord:#8b8fd0; --dot-telegram:#4fa3c7;
+    --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+    --measure:66ch;
+    background:var(--ground); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%; text-size-adjust:100%;
+  }
+  .reports-page *{box-sizing:border-box}
+  .reports-page a{color:inherit}
+  .reports-page ::selection{background:var(--accent-soft)}
+  .reports-page .wrap{max-width:860px; margin:0 auto; padding:0 22px}
+
+  /* masthead */
+  .reports-page header.top{border-bottom:1px solid var(--line); padding:40px 0 30px}
+  .reports-page .eyebrow{font-family:var(--mono); font-size:11.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 14px}
+  .reports-page h1{font-size:clamp(2.1rem,6vw,3.2rem); line-height:1.02; letter-spacing:-.02em;
+    font-weight:800; margin:0; text-wrap:balance}
+  .reports-page .lead{max-width:var(--measure); color:var(--muted); font-size:1.02rem; margin:16px 0 0}
+  .reports-page .lead b{color:var(--ink); font-weight:600}
+  .reports-page .stats{display:flex; flex-wrap:wrap; gap:26px; margin:26px 0 0}
+  .reports-page .stat .n{font-family:var(--mono); font-size:1.35rem; font-weight:600;
+    font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+  .reports-page .stat .k{font-size:.72rem; text-transform:uppercase; letter-spacing:.12em;
+    color:var(--faint); margin-top:3px}
+
+  /* controls bar — solid + NON-sticky. A sticky bar with backdrop-filter/translucency
+     gets promoted to a compositor layer that swallows touch-scroll on mobile
+     Chromium/WebKit (the page becomes unscrollable past it); a plain static bar
+     scrolls normally on every device. */
+  .reports-page .controls{background:var(--surface-2); border-bottom:1px solid var(--line); padding:12px 0}
+  .reports-page .controls-row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .reports-page .search{flex:1 1 220px; position:relative; min-width:180px}
+  .reports-page .search input{width:100%; background:var(--surface); border:1px solid var(--line-strong);
+    color:var(--ink); font-family:var(--sans); font-size:.92rem; padding:9px 12px 9px 34px;
+    border-radius:8px; outline:none}
+  .reports-page .search input:focus{border-color:var(--accent)}
+  .reports-page .search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%);
+    width:15px; height:15px; color:var(--faint)}
+  .reports-page .seg{display:inline-flex; background:var(--surface); border:1px solid var(--line-strong);
+    border-radius:8px; padding:2px}
+  .reports-page .seg button{background:none; border:0; color:var(--muted); font-family:var(--sans);
+    font-size:.82rem; padding:6px 11px; border-radius:6px; cursor:pointer; white-space:nowrap}
+  .reports-page .seg button[aria-pressed="true"]{background:var(--accent-soft); color:var(--ink)}
+  .reports-page .seg button:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .reports-page .count{font-family:var(--mono); font-size:.76rem; color:var(--faint);
+    margin-left:auto; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+  /* one-click PDF download */
+  .reports-page .dl-btn{display:inline-flex;align-items:center;margin-top:20px;padding:11px 22px;
+    border:1px solid var(--accent);border-radius:8px;color:var(--text);text-decoration:none;
+    font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.3px;
+    background:transparent;transition:background .15s,color .15s}
+  .reports-page .dl-btn:hover{background:var(--accent);color:#fff}
+  .reports-page .dl-btn span{margin-left:8px;padding:2px 8px;border-radius:5px;font-size:.72rem;
+    background:var(--accent-soft);color:var(--accent);font-weight:700}
+  .reports-page .dl-btn:hover span{background:rgba(255,255,255,.18);color:#fff}
+  /* active-import notice */
+  .reports-page .notice{margin:22px auto 0; padding:11px 18px; background:var(--accent-soft);
+    border:1px solid var(--accent); border-radius:8px; color:var(--ink);
+    font-size:.9rem; line-height:1.55; text-align:center}
+  .reports-page .notice a{color:var(--accent); font-weight:600; text-decoration:none}
+  .reports-page .notice a:hover{text-decoration:underline}
+
+  /* the running log */
+  .reports-page main{padding:8px 0 90px}
+  .reports-page .log{position:relative; margin-top:20px}
+  .reports-page .log::before{content:""; position:absolute; left:7px; top:6px; bottom:6px; width:1px;
+    background:var(--line-strong)}
+  @media (min-width:720px){ .reports-page .log::before{left:150px} }
+  .reports-page .entry{position:relative; padding:0 0 34px 34px}
+  @media (min-width:720px){ .reports-page .entry{padding-left:184px} }
+  .reports-page .entry .node{position:absolute; left:3px; top:6px; width:9px; height:9px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 0 4px var(--ground)}
+  @media (min-width:720px){ .reports-page .entry .node{left:146px} }
+  .reports-page .stamp{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:9px}
+  @media (min-width:720px){
+    .reports-page .stamp{position:absolute; left:0; top:1px; width:132px; display:block; text-align:right}
+  }
+  .reports-page .day{font-family:var(--mono); font-weight:700; font-size:.82rem; color:var(--accent);
+    letter-spacing:.02em}
+  .reports-page .date{font-family:var(--mono); font-size:.74rem; color:var(--muted);
+    font-variant-numeric:tabular-nums}
+  @media (min-width:720px){ .reports-page .date{display:block; margin-top:3px} }
+  .reports-page .card{background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:16px 18px 12px}
+  .reports-page .card:hover{border-color:var(--line-strong)}
+  .reports-page .src{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono);
+    font-size:.66rem; text-transform:uppercase; letter-spacing:.1em; color:var(--faint); margin-bottom:10px}
+  .reports-page .src .dot{width:7px; height:7px; border-radius:50%}
+  .reports-page .src.discord .dot{background:var(--dot-discord)}
+  .reports-page .src.telegram .dot{background:var(--dot-telegram)}
+  .reports-page .body{display:flex; flex-direction:column; gap:7px}
+  .reports-page .line{font-size:.96rem; line-height:1.5; color:var(--ink); max-width:var(--measure)}
+  .reports-page .subhead{font-family:var(--mono); font-size:.72rem; text-transform:uppercase;
+    letter-spacing:.12em; color:var(--muted); margin-top:6px}
+  .reports-page mark{background:var(--accent-soft); color:inherit; border-radius:2px; padding:0 1px}
+  .reports-page .card-foot{margin-top:13px; padding-top:11px; border-top:1px solid var(--line)}
+  .reports-page .footage{display:inline-flex; align-items:center; gap:6px; font-size:.8rem;
+    color:var(--muted); text-decoration:none}
+  .reports-page .footage:hover{color:var(--accent)}
+  .reports-page .footage .arw{transition:transform .18s ease}
+  .reports-page .footage:hover .arw{transform:translateX(3px)}
+
+  /* honest gap marker */
+  .reports-page .gap{position:relative; padding:6px 0 34px 34px; color:var(--faint)}
+  @media (min-width:720px){ .reports-page .gap{padding-left:184px} }
+  .reports-page .gap span{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em;
+    display:inline-flex; align-items:center; gap:9px}
+  .reports-page .gap span::before{content:""; width:16px; height:1px; background:var(--line-strong)}
+  .reports-page .empty{color:var(--muted); font-size:.95rem; padding:40px 34px; font-family:var(--sans)}
+  .reports-page footer.foot{border-top:1px solid var(--line); padding:26px 0 60px; color:var(--faint);
+    font-size:.8rem}
+  .reports-page footer.foot a{color:var(--muted)}
+  @media (prefers-reduced-motion:no-preference){
+    .reports-page .entry{animation:rp-rise .4s ease both}
+    @keyframes rp-rise{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  }
+  .reports-page :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}

@@ -211,3 +211,8 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
   .filters label input[type=date] { flex: 1 1 auto; width: auto; }
   .filters button { padding: 11px; }
 }
+
+/* geolocation page: click-to-load third-party maps */
+.geo-frame { display: block; width: 100%; height: 640px; border: 1px solid var(--border); border-radius: 6px; margin: 12px 0 8px; background: #000; }
+@media (max-width: 600px) { .geo-frame { height: 520px; } }
+.geo-embed .dl-btn { margin: 6px 8px 0 0; }
