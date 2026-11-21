@@ -2,6 +2,19 @@
 
 All notable changes to the Archive Genocide Website Mirror are recorded here.
 
+## v1.3.0 — 2026-11-21
+
+- **Works with today's archive data** (208,908 records, including the October 2026 additions). Checked end to end:
+  `get-data` fetches and verifies the signed data manifest, and the server chunks the larger gallery as before.
+- **Footage you don't have yet no longer shows as a broken image.** `get-data` always fetches the full, current list,
+  which can be ahead of the released volumes (about 4,255 items added in October 2026 will be in the next volume).
+  Those cards now show "Not in your downloaded volumes yet", and the player explains why the file is missing; the
+  caption, date and source stay complete.
+- The Reports page now has the same footer as every other page.
+- README: corrected the note on partial mirrors, and added a pointer to the free read-only public API
+  (<https://archivegenocide.com/api-docs/>).
+- No change to the torrents: Volumes 1–3 and Gaza Vol 3 are unchanged and verified.
+
 ## v1.2.0 — 2026-10-02
 
 - **Daily Reports page** (`reports.html`): the live site's 516 day-by-day reports, searchable, with each day linking to

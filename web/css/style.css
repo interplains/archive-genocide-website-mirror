@@ -52,6 +52,11 @@ header { padding: 26px 20px 8px; max-width: 1200px; margin: 0 auto; }
 .thumb-wrap { position: relative; aspect-ratio: 16/10; background: #000; overflow: hidden; }
 .thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
 .no-thumb { background: #1a1a1a; }
+.thumb-missing { background: #141414; }
+.thumb-missing::before { content: 'Not in your downloaded volumes yet'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 14px;
+  color: #777; font-size: .74rem; line-height: 1.4; }
+.media-missing { color: #aaa; padding: 40px 24px; text-align: center; line-height: 1.5; max-width: 520px; margin: 0 auto; }
 .badge { position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,.75);
   color: #fff; font-size: .72rem; padding: 2px 7px; border-radius: 4px; }
 .cap { padding: 9px 11px; font-size: .82rem; color: #cfcfcf; line-height: 1.4;

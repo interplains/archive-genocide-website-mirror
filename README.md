@@ -84,8 +84,13 @@ The archive grows in **additive volumes**, all sharing the one `archivegenocide-
    `archivegenocide-media/_index/`), rebuilds `data/index.json`, and the new footage appears —
    **already searchable and sorted**, its source added to the filter dropdown.
 
-You never hand-edit a manifest, and a mirror holding only *some* volumes just shows those (no
-broken cards). Static host? run `python serve.py --reindex` to regenerate the manifest, then redeploy.
+You never hand-edit a manifest. `get-data` always fetches the full, current list, which can be ahead of
+the released volumes (items added after the latest volume, or volumes you haven't downloaded): those
+cards show **"Not in your downloaded volumes yet"** instead of a broken image, with their caption, date
+and source intact. Static host? run `python serve.py --reindex` to regenerate the manifest, then redeploy.
+
+The same records are also available from the free, read-only public API (no key needed):
+<https://archivegenocide.com/api-docs/>.
 
 ---
 

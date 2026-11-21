@@ -267,6 +267,14 @@ function render() {
   grid.querySelectorAll('.card').forEach(c =>
     c.addEventListener('click', () => openModal(+c.dataset.i)));
 
+  // Footage that is listed online but not in the torrent volumes you downloaded (e.g. items added after the
+  // latest volume) shows a plain tile instead of a broken image.
+  grid.querySelectorAll('img.thumb').forEach(img => {
+    const missing = () => { const w = img.parentNode; img.remove(); if (w) w.classList.add('thumb-missing'); };
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) missing();
+    else img.addEventListener('error', missing, { once: true });
+  });
+
   renderPager(pages);
 }
 
@@ -312,6 +320,11 @@ function openModal(i) {
   } else {
     box.innerHTML = `<img src="${esc(mediaUrl(e))}" alt="">`;
   }
+  const el = box.firstElementChild;
+  if (el) el.addEventListener('error', () => {
+    box.innerHTML = '<p class="media-missing">This file is not in the torrent volumes in your media folder yet. ' +
+      'It will be part of a future volume; the caption, date and source below are complete.</p>';
+  }, { once: true });
   const meta = [];
   if (e.source_archive) meta.push('Source: ' + esc(e.source_archive));
   if (e.timestamp) meta.push('Date: ' + esc(e.timestamp.slice(0, 10)));
